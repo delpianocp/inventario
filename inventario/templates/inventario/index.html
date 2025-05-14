@@ -1,0 +1,25 @@
+{% extends "inventario/base.html" %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<section id="login" class="container mt-3 contenido">
+    <h2 class="text-center">Iniciar Sesión</h2>
+    <p class="text-center">Accede al sistema para gestionar tu inventario.</p>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h3 class="text-center">Formulario de Login</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}  <!-- Renderiza los campos del formulario automáticamente -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Entrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

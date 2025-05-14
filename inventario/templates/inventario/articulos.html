@@ -1,0 +1,62 @@
+{% extends "inventario/base.html" %}
+
+{% block title %}Lista de Artículos{% endblock %}
+
+{% block content %}
+<section id="articulos" class="container mt-3 contenido">
+    <h2 class="text-center">Lista de Artículos</h2>
+    <p class="text-center">Aquí puedes ver todos los artículos cargados en el sistema.</p>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8">
+            <div class="card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="text-center mb-0">Artículos Registrados</h3>
+                    <div>
+                        <a href="{% url 'cargar_articulo' %}" class="btn btn-success">Cargar Artículo</a>
+                        <a href="{% url 'generar_pdf' %}" class="btn btn-primary ms-2">Descargar PDF</a>
+                    </div>
+                </div>
+                
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Cantidad</th>
+                            <th>Asignación</th>
+                            <th>Valor</th>
+                            <th>Foto</th>
+                            <th class="text-center">👁</th> <!-- Se centra el emoticono -->
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                        {% for articulo in articulos %}
+                        <tr>
+                            <td>{{ articulo.id }}</td>
+                            <td>{{ articulo.nombre }}</td>
+                            <td>{{ articulo.cantidad }}</td>
+                            <td>{{ articulo.asignacion }}</td>
+                            <td>${{ articulo.valor }}</td>
+                            <td>
+                                {% if articulo.foto %}
+                                    <img src="{{ articulo.foto.url }}" alt="Foto de {{ articulo.nombre }}" class="img-thumbnail" width="50">
+                                {% else %}
+                                    <span class="text-muted">Sin imagen</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'detalle_articulo' articulo.id %}"><button type="button" class="btn btn-link">Ver detalle</button></a>
+                                
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

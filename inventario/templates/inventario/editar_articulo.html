@@ -1,0 +1,28 @@
+{% extends "inventario/base.html" %}
+
+{% block title %}Editar {{ articulo.nombre }}{% endblock %}
+
+{% block content %}
+<section id="editar_articulo" class="container mt-3 contenido">
+    <h2 class="text-center">Editar Artículo</h2>
+    <p class="text-center">Modifica los detalles de "{{ articulo.nombre }}".</p>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h3 class="text-center">Formulario de Edición</h3>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                    </div>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="{% url 'detalle_articulo' articulo.id %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

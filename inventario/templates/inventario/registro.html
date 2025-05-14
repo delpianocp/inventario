@@ -1,0 +1,30 @@
+{% extends "inventario/base.html" %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<section id="registro" class="container mt-3 contenido">
+    <h2 class="text-center">Registrarse</h2>
+    <p class="text-center">Crea una cuenta para gestionar tu inventario.</p>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h3 class="text-center">Formulario de Registro</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}  <!-- Django genera los campos automáticamente -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success">Registrarse</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+
+
+
+

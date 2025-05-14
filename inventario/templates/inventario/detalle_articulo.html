@@ -1,0 +1,37 @@
+{% extends "inventario/base.html" %}
+
+{% block title %}Detalles de {{ articulo.nombre }}{% endblock %}
+
+{% block content %}
+<section id="detalle_articulo" class="container mt-3 contenido">
+    <h2 class="text-center">Detalles del Artículo</h2>
+    <p class="text-center">Información detallada sobre "{{ articulo.nombre }}".</p>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h3 class="text-center">{{ articulo.nombre }}</h3>
+                <p><strong>Descripción:</strong> {{ articulo.descripcion }}</p>
+                <p><strong>Cantidad:</strong> {{ articulo.cantidad }}</p>
+                <p><strong>Asignación:</strong> {{ articulo.asignacion }}</p>
+                <p><strong>Valor:</strong> ${{ articulo.valor }}</p>
+
+                {% if articulo.foto %}
+                    <img src="{{ articulo.foto.url }}" alt="Foto de {{ articulo.nombre }}" class="img-fluid">
+                {% else %}
+                    <p class="text-muted text-center">Sin imagen disponible</p>
+                {% endif %}
+
+                <div class="text-center mt-3">
+                    <a href="{% url 'articulos' %}" class="btn btn-secondary">Volver a la lista</a>
+                    <a href="{% url 'editar_articulo' articulo.id %}" class="btn btn-warning">Editar</a>
+                    <form method="POST" action="{% url 'eliminar_articulo' articulo.id %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
