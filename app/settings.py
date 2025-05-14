@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-28cd!us=2#$u#o09brr-^w98$7o&0-0)@4bop_yru*#nt@)t4%
 DEBUG = False
 
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["inventario-production-886b.up.railway.app"]
 
 
 # Application definition
@@ -120,3 +120,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://inventario-production-886b.up.railway.app"
+]
