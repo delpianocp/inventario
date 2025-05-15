@@ -40,3 +40,17 @@ form label {
     font-weight: bold;
 }
 
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+    th, td {
+        padding: 8px;
+    }
+    img.img-thumbnail {
+        width: 40px;
+    }
+}
+
+
+

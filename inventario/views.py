@@ -40,7 +40,7 @@ def registro(request):
             usuario = form.save(commit=False)
             usuario.set_password(form.cleaned_data["password"])  # Encripta la contraseña
             usuario.save()
-            return redirect("articulos")  # Redirige al login tras el registro
+            return redirect("index")  # Redirige al login tras el registro
     else:
         form = RegistroForm()
 
