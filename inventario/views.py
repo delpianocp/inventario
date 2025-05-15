@@ -14,6 +14,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle
 import time
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 def index(request):
@@ -48,7 +50,14 @@ def registro(request):
     return render(request, "inventario/registro.html", {"form": form, "show_register": False, "show_inicio": True})
 
 def redirigiendo(request):
+    if request.user.is_authenticated:  # Verificamos si hay un usuario autenticado
+        subject = "¡Registro exitoso!"
+        message = f"Hola {request.user.username},\n\n¡Tu registro ha sido exitoso! Bienvenido."
+        recipient_email = request.user.email
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [recipient_email])
+    
     return render(request, "inventario/redirigiendo.html")
+    
 
 
 @login_required
