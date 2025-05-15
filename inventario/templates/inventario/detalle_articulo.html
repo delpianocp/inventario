@@ -15,6 +15,7 @@
                 <p><strong>Cantidad:</strong> {{ articulo.cantidad }}</p>
                 <p><strong>Asignación:</strong> {{ articulo.asignacion }}</p>
                 <p><strong>Valor:</strong> ${{ articulo.valor }}</p>
+                <p><strong>Cargado por:</strong> {{ articulo.user.username }}</p> <!-- Muestra el usuario que lo registró -->
 
                 {% if articulo.foto %}
                     <img src="{{ articulo.foto.url }}" alt="Foto de {{ articulo.nombre }}" class="img-fluid">
