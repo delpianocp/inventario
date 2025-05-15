@@ -1,0 +1,16 @@
+{% extends "inventario/base.html" %}
+
+{% block title %}Redirigiendo...{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2>¡Registrado con éxito! 🎉</h2>
+    <p>Serás llevado a la página principal en unos segundos.</p>
+    
+    <script>
+        setTimeout(function() {
+            window.location.href = "{% url 'index' %}";
+        }, 3000);  // Redirige después de 3 segundos
+    </script>
+</div>
+{% endblock %}

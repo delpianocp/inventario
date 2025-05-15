@@ -13,8 +13,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle
-
-
+import time
 
 
 def index(request):
@@ -40,11 +39,17 @@ def registro(request):
             usuario = form.save(commit=False)
             usuario.set_password(form.cleaned_data["password"])  # Encripta la contraseña
             usuario.save()
-            return redirect("index")  # Redirige al login tras el registro
+            return redirect("redirigiendo")
+
+ # Redirige al login tras el registro
     else:
         form = RegistroForm()
 
     return render(request, "inventario/registro.html", {"form": form, "show_register": False, "show_inicio": True})
+
+def redirigiendo(request):
+    return render(request, "inventario/redirigiendo.html")
+
 
 @login_required
 def listar_articulos(request):
