@@ -31,6 +31,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
     'inventario',
+    'cloudinary',
+    'cloudinary_storage',
+
 ]
 
 MIDDLEWARE = [
@@ -139,6 +142,13 @@ EMAIL_HOST_PASSWORD = "mlxc qhpt jyhu sycb"  # ⚠️ Usa variables de entorno p
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dxra3bnrm',
+    'API_KEY': '464665576365125',
+    'API_SECRET': 'Vayt6oR9UDicyFKCwKUi-Vz5j3g',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 
