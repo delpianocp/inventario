@@ -16,21 +16,30 @@ from reportlab.platypus import Table, TableStyle
 import time
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib.auth.views import LoginView
 
 
 def index(request):
     if request.method == "POST":
         form = LoginForm(data=request.POST)
         if form.is_valid():
-            usuario = form.get_user()
-            login(request, usuario)
-            return redirect("articulos")  
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+
+            user = User.objects.filter(email=email).first()  # Buscar usuario por email
+            if user:
+                user = authenticate(username=user.username, password=password)
+
+            if user:
+                login(request, user)
+                return redirect("articulos")
+            else:
+                form.add_error(None, "Correo o contraseña incorrectos.")
+
     else:
         form = LoginForm()
     
     return render(request, "inventario/index.html", {"form": form, "show_register": True, "show_inicio": False})
-
-
 
 
 
