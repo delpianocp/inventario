@@ -14,11 +14,26 @@
                     <h3 class="text-center mb-2 mb-md-0">Artículos Registrados</h3>
                     <div class="d-flex flex-column flex-md-row">
                         <a href="{% url 'cargar_articulo' %}" class="btn btn-success mb-2 mb-md-0 me-md-2">Cargar Artículo</a>
-                        <a href="{% url 'generar_pdf' %}" class="btn btn-primary">Descargar PDF</a>
+                        <a href="{% url 'generar_xls' %}?asignacion={{ asignacion_filtrada }}" class="btn btn-success">
+                            Descargar XLS Filtrado
+                        </a>
                     </div>
                 </div>
 
-                <!-- 🛠 Hacemos la tabla responsive -->
+                <!-- 🔍 Filtro por Asignación -->
+                <form method="GET" class="mb-3">
+                    <label for="filtro_asignacion">Filtrar por Asignación:</label>
+                    <select name="asignacion" id="filtro_asignacion" class="form-control" onchange="this.form.submit()">
+                        <option value="">-- Todos --</option>
+                        {% for asignacion in asignaciones_disponibles %}
+                            <option value="{{ asignacion }}" {% if asignacion == asignacion_filtrada %}selected{% endif %}>
+                                {{ asignacion }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+
+                <!-- 🛠 Tabla de artículos -->
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead class="table-dark">

@@ -17,6 +17,11 @@ import time
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.views import LoginView
+from .models import Articulo
+import openpyxl
+from django.http import HttpResponse
+from .models import Articulo
+
 
 
 def index(request):
@@ -71,8 +76,22 @@ def redirigiendo(request):
 
 @login_required
 def listar_articulos(request):
-    articulos = Articulo.objects.all()  # Obtiene todos los artículos de la base de datos
-    return render(request, "inventario/articulos.html", {"articulos": articulos})
+    asignacion_filtrada = request.GET.get("asignacion", None)
+    articulos = Articulo.objects.all()
+
+    if asignacion_filtrada:
+        articulos = articulos.filter(asignacion=asignacion_filtrada)
+
+    asignaciones_disponibles = Articulo.objects.values_list("asignacion", flat=True).distinct()
+
+    return render(request, "inventario/articulos.html", {
+        "articulos": articulos,
+        "asignaciones_disponibles": asignaciones_disponibles,
+        "asignacion_filtrada": asignacion_filtrada,
+    })
+
+
+
 
 @login_required
 def cargar_articulo(request):
@@ -120,52 +139,38 @@ def eliminar_articulo(request, articulo_id):
 
     return render(request, "inventario/eliminar_articulo.html", {"articulo": articulo})
 
-def truncar_texto(texto, longitud_maxima):
-    """Trunca el texto si supera la longitud máxima"""
-    return texto[:longitud_maxima] + "…" if len(texto) > longitud_maxima else texto
 
-def generar_pdf(request):
-    response = HttpResponse(content_type="application/pdf")
-    response["Content-Disposition"] = "attachment; filename=lista_articulos.pdf"
 
-    # Crear PDF con tamaño carta
-    p = canvas.Canvas(response, pagesize=letter)
-    p.setTitle("Lista de Artículos")
-
-    # Encabezado
-    p.setFont("Helvetica-Bold", 16)
-    p.drawString(200, 750, "Lista de Artículos")
-
-    # Datos para la tabla
-    data = [["ID", "Nombre", "Cantidad", "Asignación", "Valor"]]  # Encabezados
+def generar_xls(request):
+    asignacion_filtrada = request.GET.get("asignacion", None)
     articulos = Articulo.objects.all()
 
+    if asignacion_filtrada:
+        articulos = articulos.filter(asignacion=asignacion_filtrada)
+
+    if not articulos.exists():
+        response = HttpResponse("No hay artículos disponibles para esta asignación.", content_type="text/plain")
+        return response
+
+    # Crear archivo Excel
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Lista de Artículos"
+
+    # Ajustar ancho de la columna B
+    ws.column_dimensions["B"].width = 30  # Ajustar la columna de nombres
+
+    # Encabezados
+    headers = ["ID", "Nombre", "Cantidad", "Asignación", "Valor"]
+    ws.append(headers)
+
+    # Agregar datos
     for articulo in articulos:
-        data.append([
-            articulo.id, 
-            truncar_texto(articulo.nombre, 20),  # Limita el nombre a 20 caracteres
-            articulo.cantidad, 
-            truncar_texto(articulo.asignacion, 15),  # Limita asignación a 15 caracteres
-            f"${articulo.valor}"
-        ])
+        ws.append([articulo.id, articulo.nombre, articulo.cantidad, articulo.asignacion, articulo.valor])
 
-    # Crear tabla con columnas bien definidas
-    table = Table(data, colWidths=[50, 150, 80, 120, 80])
-    table.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
-        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
-        ("GRID", (0, 0), (-1, -1), 1, colors.black),
-        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.lightgrey]),
-    ]))
+    # Configurar respuesta HTTP
+    response = HttpResponse(content_type="application/vnd.ms-excel")
+    response["Content-Disposition"] = 'attachment; filename="lista_articulos.xlsx"'
+    wb.save(response)
 
-    # Posicionar tabla
-    table.wrapOn(p, 50, 500)
-    table.drawOn(p, 50, 550)
-
-    p.showPage()
-    p.save()
-    
     return response
