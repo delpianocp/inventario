@@ -28,6 +28,19 @@
                                     <option value="Venta" {% if field.value == "Venta" %}selected{% endif %}>Venta</option>
                                     <option value="Donacion" {% if field.value == "Donacion" %}selected{% endif %}>Donación</option>
                                 </select>
+
+                            {% elif field.name == "categoria" %}
+                                <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
+                                    <option value="">Selecciona una categoría</option>
+                                    <option value="Muebles" {% if field.value == "Muebles" %}selected{% endif %}>Muebles</option>
+                                    <option value="Vajilla" {% if field.value == "Vajilla" %}selected{% endif %}>Vajilla</option>
+                                    <option value="Electronica" {% if field.value == "Electronica" %}selected{% endif %}>Electrónica</option>
+                                    <option value="Linea blanca" {% if field.value == "Linea blanca" %}selected{% endif %}>Línea blanca</option>
+                                    <option value="Utensillos cocina" {% if field.value == "Utensillos cocina" %}selected{% endif %}>Utensilios de cocina</option>
+                                    <option value="Decoracion" {% if field.value == "Decoracion" %}selected{% endif %}>Decoración</option>
+                                    <option value="Electrodomesticos" {% if field.value == "Electrodomesticos" %}selected{% endif %}>Electrodomésticos</option>
+                                </select>
+
                             {% else %}
                                 {{ field }}
                             {% endif %}
