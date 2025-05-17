@@ -35,6 +35,13 @@
         </div>
     </form>
 
+    <!-- 📥 Botón para Descargar XLS -->
+    <div class="text-center mb-4">
+        <a href="{% url 'generar_xls' %}?asignacion={{ asignacion_filtrada }}&categoria={{ categoria_filtrada }}" class="btn btn-success">
+            Descargar XLS Filtrado
+        </a>
+    </div>
+
     <!-- 🛍 Diseño estilo Mercado Libre -->
     <div class="row">
         {% for articulo in articulos %}
