@@ -35,10 +35,10 @@
         </div>
     </form>
 
-    <!-- 📥 Botón para Descargar XLS -->
+    <!-- 📥 Botón para Descargar XLS (Todos los artículos por defecto) -->
     <div class="text-center mb-4">
-        <a href="{% url 'generar_xls' %}?asignacion={{ asignacion_filtrada }}&categoria={{ categoria_filtrada }}" class="btn btn-success">
-            Descargar XLS Filtrado
+        <a href="{% url 'generar_xls' %}" class="btn btn-success">
+            Descargar XLS (Todos los artículos)
         </a>
     </div>
 
