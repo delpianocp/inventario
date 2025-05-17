@@ -1,21 +1,22 @@
 from django import forms
-from .models import Articulo, User
+from .models import Articulo, User, Categoria
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 
-
-
-
-
-
-
 class ArticuloForm(forms.ModelForm):
+    categoria = forms.ModelChoiceField(
+        queryset=Categoria.objects.all(),
+        empty_label="Seleccione una categoría",
+        required=True
+    )
+
     class Meta:
         model = Articulo
-        fields = ["nombre", "descripcion", "cantidad", "asignacion", "valor", "foto"]
+        fields = ["nombre", "descripcion", "cantidad", "asignacion", "valor", "foto", "categoria"]
+
 
 '''class RegistroForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)

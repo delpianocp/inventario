@@ -13,11 +13,58 @@
                 <h3 class="text-center">Formulario de Edición</h3>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ form.as_p }}
+
+                    <!-- Campo Nombre -->
+                    <div class="mb-3">
+                        {{ form.nombre.label_tag }}
+                        {{ form.nombre }}
+                    </div>
+
+                    <!-- Campo Descripción -->
+                    <div class="mb-3">
+                        {{ form.descripcion.label_tag }}
+                        {{ form.descripcion }}
+                    </div>
+
+                    <!-- Campo Cantidad -->
+                    <div class="mb-3">
+                        {{ form.cantidad.label_tag }}
+                        {{ form.cantidad }}
+                    </div>
+
+                    <!-- Campo Asignación -->
+                    <div class="mb-3">
+                        {{ form.asignacion.label_tag }}
+                        {{ form.asignacion }}
+                    </div>
+
+                    <!-- Campo Valor -->
+                    <div class="mb-3">
+                        {{ form.valor.label_tag }}
+                        {{ form.valor }}
+                    </div>
+
+                    <!-- Campo Categoría -->
+                    <div class="mb-3">
+                        <label for="categoria">Categoría:</label>
+                        {{ form.categoria }}
+                    </div>
+
+                    <!-- Campo Foto -->
+                    <div class="mb-3">
+                        {{ form.foto.label_tag }}
+                        {{ form.foto }}
+                        {% if articulo.foto %}
+                            <p class="text-center mt-2">Imagen actual:</p>
+                            <img src="{{ articulo.foto.url }}" alt="Foto de {{ articulo.nombre }}" class="img-thumbnail" width="100">
+                        {% endif %}
+                    </div>
+
                     <div class="d-grid">
                         <button type="submit" class="btn btn-success">Guardar Cambios</button>
                     </div>
                 </form>
+
                 <div class="text-center mt-3">
                     <a href="{% url 'detalle_articulo' articulo.id %}" class="btn btn-secondary">Cancelar</a>
                 </div>

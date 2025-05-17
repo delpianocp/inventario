@@ -17,7 +17,7 @@ class Articulo(models.Model):
     valor = models.DecimalField(max_digits=10, decimal_places=2)
     foto = CloudinaryField('image', blank=True, null=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # Relación con el usuario que lo creó
-    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, related_name="productos")
+    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, related_name="articulos")
 
 
 

@@ -26,7 +26,10 @@ from .models import Articulo
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from .forms import RegistroForm
-
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import ArticuloForm
+from .models import Articulo
 
 
 def index(request):
@@ -168,14 +171,29 @@ def detalle_articulo(request, articulo_id):
     
     return render(request, "inventario/detalle_articulo.html", contexto)
 
+
+
 @login_required
 def editar_articulo(request, articulo_id):
     articulo = get_object_or_404(Articulo, id=articulo_id)
+
+    # Validar que el usuario solo edite artículos que le pertenecen
+    if articulo.usuario != request.user:
+        return redirect("articulos")  # Redirige si el usuario no tiene permiso
+
     if request.method == "POST":
         form = ArticuloForm(request.POST, request.FILES, instance=articulo)
         if form.is_valid():
-            form.save()
+            articulo = form.save(commit=False)
+
+            # Validación de la categoría
+            categoria = form.cleaned_data.get("categoria")
+            if categoria:
+                articulo.categoria = categoria
+            
+            articulo.save()
             return redirect("detalle_articulo", articulo_id=articulo.id)
+
     else:
         form = ArticuloForm(instance=articulo)
 
