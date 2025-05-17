@@ -19,34 +19,31 @@
                             <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
 
                             {% if field.name == "descripcion" %}
-                                <textarea id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control" rows="3">
-                                    {{ field.value|default_if_none:"" }}
-                                </textarea>
+                                <textarea id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control" rows="3">{{ field.value|default_if_none:"" }}</textarea>
 
                             {% elif field.name == "asignacion" %}
                                 <!-- Campo Select para Asignación -->
                                 <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
                                     <option value="">Selecciona una opción</option>
-                                    {% for opcion in asignaciones_disponibles %}
-                                        <option value="{{ opcion }}" {% if field.value == opcion %}selected{% endif %}>{{ opcion }}</option>
-                                    {% endfor %}
+                                    <option value="Romina">Romina</option>
+                                    <option value="Carolina">Carolina</option>
+                                    <option value="Lucas">Lucas</option>
+                                    <option value="Soledad">Soledad</option>
+                                    <option value="Venta">Venta</option>
+                                    <option value="Donacion">Donación</option>
                                 </select>
 
                             {% elif field.name == "categoria" %}
-                                <!-- Campo Select para Categoría cargada dinámicamente -->
+                                <!-- Campo Select para Categoría -->
                                 <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
                                     <option value="">Selecciona una categoría</option>
-                                    {% for categoria in categorias_disponibles %}
-                                        <option value="{{ categoria.id }}" {% if field.value == categoria.id %}selected{% endif %}>
-                                            {{ categoria.nombre }}
-                                        </option>
-                                    {% endfor %}
+                                    <option value="Línea blanca">Línea blanca</option>
+                                    <option value="Muebles">Muebles</option>
+                                    <option value="Electrodomésticos">Electrodomésticos</option>
+                                    <option value="Elementos de cocina">Elementos de cocina</option>
+                                    <option value="Electrónica">Electrónica</option>
+                                    <option value="Decoración">Decoración</option>
                                 </select>
-
-                                <!-- Opción para agregar una nueva categoría -->
-                                <div class="mt-2">
-                                    <input type="text" name="nueva_categoria" class="form-control" placeholder="Nueva categoría (opcional)">
-                                </div>
 
                             {% else %}
                                 {{ field }}
