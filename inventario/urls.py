@@ -13,7 +13,7 @@ urlpatterns = [
     path("articulo/<int:articulo_id>/eliminar/", eliminar_articulo, name="eliminar_articulo"),
     path("generar_xls/", generar_xls, name="generar_xls"),
     path("redirigiendo/", redirigiendo, name="redirigiendo"),
-    path("articulos_card/", articulos_card, name="articulos_card"),
+    path("articulos_card", articulos_card, name="articulos_card"),
 
 
 
