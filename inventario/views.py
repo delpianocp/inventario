@@ -111,9 +111,10 @@ def listar_articulos(request):
     if categoria_filtrada:
         articulos = articulos.filter(categoria=categoria_filtrada)
 
-    asignaciones_disponibles = Articulo.objects.values_list("asignacion", flat=True).distinct()
-    categorias_disponibles = Articulo.objects.values_list("categoria", flat=True).distinct()
-
+    '''asignaciones_disponibles = Articulo.objects.values_list("asignacion", flat=True).distinct()
+    categorias_disponibles = Articulo.objects.values_list("categoria", flat=True).distinct()'''
+    asignaciones_disponibles = Articulo.objects.order_by("asignacion").values_list("asignacion", flat=True).distinct()
+    categorias_disponibles = Articulo.objects.order_by("categoria").values_list("categoria", flat=True).distinct()
     return render(request, "inventario/articulos.html", {
         "articulos": articulos,
         "asignaciones_disponibles": asignaciones_disponibles,
