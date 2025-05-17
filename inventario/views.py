@@ -47,7 +47,7 @@ def index(request):
     else:
         form = LoginForm()
     
-    return render(request, "inventario/index.html", {"form": form, "show_register": True, "show_inicio": False})
+    return render(request, "inventario/index.html", {"form": form, "show_inicio": False})
 
 
 
@@ -86,7 +86,7 @@ def registro(request):
     else:
         form = RegistroForm()
 
-    return render(request, "inventario/registro.html", {"form": form, "show_register": False, "show_inicio": True})
+    return render(request, "inventario/registro.html", {"form": form, "show_inicio": True})
 
 def redirigiendo(request):
     if request.user.is_authenticated:  # Verificamos si hay un usuario autenticado
@@ -137,7 +137,7 @@ def cargar_articulo(request):
     else:
         form = ArticuloForm()
 
-    return render(request, "inventario/cargar_articulo.html", {"form": form, "show_register": False, "show_inicio": False})
+    return render(request, "inventario/cargar_articulo.html", {"form": form, "show_inicio": False})
 
 @login_required
 def logout_view(request):

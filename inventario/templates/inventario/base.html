@@ -17,11 +17,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>    
-            {% if show_register %}
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <a class="navbar-brand" href="{% url 'registro' %}"><button class="btn btn-outline-light" type="button">Registrarse</button></a>
-            </div>
-            {% endif %}
+            
             {% if show_inicio %}
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <a class="navbar-brand" href="{% url 'index' %}"><button class="btn btn-outline-light" type="button">Inicio</button></a>
