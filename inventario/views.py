@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Articulo
+from .models import Articulo, Categoria
+
+
 from .forms import ArticuloForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -102,17 +104,27 @@ def redirigiendo(request):
 @login_required
 def listar_articulos(request):
     asignacion_filtrada = request.GET.get("asignacion", None)
+    categoria_filtrada = request.GET.get("categoria", None)
+    
     articulos = Articulo.objects.all()
 
+    # Filtrar por asignación si está presente
     if asignacion_filtrada:
         articulos = articulos.filter(asignacion=asignacion_filtrada)
 
+    # Filtrar por categoría si está presente
+    if categoria_filtrada:
+        articulos = articulos.filter(categoria__nombre=categoria_filtrada)
+
     asignaciones_disponibles = Articulo.objects.values_list("asignacion", flat=True).distinct()
+    categorias_disponibles = Categoria.objects.values_list("nombre", flat=True).distinct()
 
     return render(request, "inventario/articulos.html", {
         "articulos": articulos,
         "asignaciones_disponibles": asignaciones_disponibles,
+        "categorias_disponibles": categorias_disponibles,
         "asignacion_filtrada": asignacion_filtrada,
+        "categoria_filtrada": categoria_filtrada,
     })
 
 
@@ -125,8 +137,15 @@ def cargar_articulo(request):
         if form.is_valid():
             articulo = form.save(commit=False)  # No guardamos todavía
             articulo.usuario = request.user  # Asignamos el usuario autenticado
+
+            # Validamos la categoría
+            categoria = form.cleaned_data.get("categoria")
+            if categoria:
+                articulo.categoria = categoria  # Asignamos la categoría seleccionada
+            
             articulo.save()  # Ahora sí guardamos
-            return redirect("articulos")
+            return redirect("articulos")  # Redirige a la lista de artículos
+
     else:
         form = ArticuloForm()
 
@@ -140,7 +159,14 @@ def logout_view(request):
 @login_required
 def detalle_articulo(request, articulo_id):
     articulo = get_object_or_404(Articulo, id=articulo_id)
-    return render(request, "inventario/detalle_articulo.html", {"articulo": articulo})
+    
+    contexto = {
+        "articulo": articulo,
+        "categoria": articulo.categoria.nombre if articulo.categoria else "Sin categoría",
+        "usuario_creador": articulo.usuario.username if articulo.usuario else "No asignado",
+    }
+    
+    return render(request, "inventario/detalle_articulo.html", contexto)
 
 @login_required
 def editar_articulo(request, articulo_id):
