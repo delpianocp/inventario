@@ -51,8 +51,10 @@
                     {% if articulo.foto %}
                         <img src="{{ articulo.foto.url }}" class="card-img-top" alt="{{ articulo.nombre }}">
                     {% else %}
-                        <img src="https://via.placeholder.com/200?text=Sin+Imagen" class="card-img-top" alt="Imagen no disponible">
+                        <img src="{% static 'img/sin_imagen.png' %}" class="card-img-top" alt="Imagen en blanco">
                     {% endif %}
+
+
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ articulo.nombre }}</h5>
