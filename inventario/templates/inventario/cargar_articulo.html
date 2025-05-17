@@ -28,9 +28,7 @@
                                 <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
                                     <option value="">Selecciona una opción</option>
                                     {% for opcion in asignaciones_disponibles %}
-                                        <option value="{{ opcion }}" {% if opcion == field.value %}selected{% endif %}>
-                                            {{ opcion }}
-                                        </option>
+                                        <option value="{{ opcion }}" {% if field.value == opcion %}selected{% endif %}>{{ opcion }}</option>
                                     {% endfor %}
                                 </select>
 
@@ -39,11 +37,16 @@
                                 <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
                                     <option value="">Selecciona una categoría</option>
                                     {% for categoria in categorias_disponibles %}
-                                        <option value="{{ categoria.id }}" {% if categoria.id == field.value %}selected{% endif %}>
+                                        <option value="{{ categoria.id }}" {% if field.value == categoria.id %}selected{% endif %}>
                                             {{ categoria.nombre }}
                                         </option>
                                     {% endfor %}
                                 </select>
+
+                                <!-- Opción para agregar una nueva categoría -->
+                                <div class="mt-2">
+                                    <input type="text" name="nueva_categoria" class="form-control" placeholder="Nueva categoría (opcional)">
+                                </div>
 
                             {% else %}
                                 {{ field }}

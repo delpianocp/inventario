@@ -135,24 +135,33 @@ def listar_articulos(request):
 
 @login_required
 def cargar_articulo(request):
+    categorias_disponibles = Categoria.objects.all()  # Obtiene todas las categorías disponibles
+
     if request.method == "POST":
         form = ArticuloForm(request.POST, request.FILES)
         if form.is_valid():
-            articulo = form.save(commit=False)  # No guardamos todavía
-            articulo.usuario = request.user  # Asignamos el usuario autenticado
+            articulo = form.save(commit=False)
+            articulo.usuario = request.user  # Asigna el usuario autenticado
 
-            # Validamos la categoría
+            # Validación y asignación de categoría
             categoria = form.cleaned_data.get("categoria")
             if categoria:
-                articulo.categoria = categoria  # Asignamos la categoría seleccionada
+                articulo.categoria = categoria  # Asigna la categoría seleccionada
             
-            articulo.save()  # Ahora sí guardamos
+            articulo.save()  # Guarda el artículo con todos sus datos
             return redirect("articulos")  # Redirige a la lista de artículos
 
     else:
         form = ArticuloForm()
 
-    return render(request, "inventario/cargar_articulo.html", {"form": form, "show_register": False, "show_inicio": False})
+    return render(request, "inventario/cargar_articulo.html", {
+        "form": form,
+        "categorias_disponibles": categorias_disponibles,
+        "show_register": False,
+        "show_inicio": False
+    })
+
+
 
 @login_required
 def logout_view(request):
