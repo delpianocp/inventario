@@ -15,7 +15,7 @@ from django.contrib.auth.forms import UserCreationForm
 class ArticuloForm(forms.ModelForm):
     class Meta:
         model = Articulo
-        fields = ["nombre", "descripcion", "cantidad", "asignacion", "valor", "foto"]
+        fields = ["nombre", "descripcion", "cantidad", "asignacion", "valor", "foto", "categoria"]
 
 '''class RegistroForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
