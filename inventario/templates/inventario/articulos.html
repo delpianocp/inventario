@@ -14,23 +14,38 @@
                     <h3 class="text-center mb-2 mb-md-0">Artículos Registrados</h3>
                     <div class="d-flex flex-column flex-md-row">
                         <a href="{% url 'cargar_articulo' %}" class="btn btn-success mb-2 mb-md-0 me-md-2">Cargar Artículo</a>
-                        <a href="{% url 'generar_xls' %}?asignacion={{ asignacion_filtrada }}" class="btn btn-success">
+                        <a href="{% url 'generar_xls' %}?asignacion={{ asignacion_filtrada }}&categoria={{ categoria_filtrada }}" class="btn btn-success">
                             Descargar XLS Filtrado
                         </a>
                     </div>
                 </div>
 
-                <!-- 🔍 Filtro por Asignación -->
+                <!-- 🔍 Filtros por Asignación y Categoría -->
                 <form method="GET" class="mb-3">
-                    <label for="filtro_asignacion">Filtrar por Asignación:</label>
-                    <select name="asignacion" id="filtro_asignacion" class="form-control" onchange="this.form.submit()">
-                        <option value="">-- Todos --</option>
-                        {% for asignacion in asignaciones_disponibles %}
-                            <option value="{{ asignacion }}" {% if asignacion == asignacion_filtrada %}selected{% endif %}>
-                                {{ asignacion }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="filtro_asignacion">Filtrar por Asignación:</label>
+                            <select name="asignacion" id="filtro_asignacion" class="form-control" onchange="this.form.submit()">
+                                <option value="">-- Todos --</option>
+                                {% for asignacion in asignaciones_disponibles %}
+                                    <option value="{{ asignacion }}" {% if asignacion == asignacion_filtrada %}selected{% endif %}>
+                                        {{ asignacion }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="filtro_categoria">Filtrar por Categoría:</label>
+                            <select name="categoria" id="filtro_categoria" class="form-control" onchange="this.form.submit()">
+                                <option value="">-- Todas --</option>
+                                {% for categoria in categorias_disponibles %}
+                                    <option value="{{ categoria }}" {% if categoria == categoria_filtrada %}selected{% endif %}>
+                                        {{ categoria }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
                 </form>
 
                 <!-- 🛠 Tabla de artículos -->
@@ -42,6 +57,7 @@
                                 <th>Nombre</th>
                                 <th>Cantidad</th>
                                 <th>Asignación</th>
+                                <th>Categoría</th>
                                 <th>Valor</th>
                                 <th>Foto</th>
                                 <th class="text-center">👁</th>
@@ -54,6 +70,7 @@
                                 <td>{{ articulo.nombre }}</td>
                                 <td>{{ articulo.cantidad }}</td>
                                 <td>{{ articulo.asignacion }}</td>
+                                <td>{{ articulo.categoria }}</td>
                                 <td>${{ articulo.valor }}</td>
                                 <td>
                                     {% if articulo.foto %}

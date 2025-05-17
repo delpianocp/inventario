@@ -20,6 +20,7 @@
 
                             {% if field.name == "descripcion" %}
                                 <textarea id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control" rows="3">{{ field.value|default_if_none:"" }}</textarea>
+
                             {% elif field.name == "asignacion" %}
                                 <!-- Campo Select para Asignación -->
                                 <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
@@ -31,6 +32,20 @@
                                     <option value="Venta">Venta</option>
                                     <option value="Donacion">Donación</option>
                                 </select>
+
+                            {% elif field.name == "categoria" %}
+                                <!-- Campo Select para Categoría -->
+                                <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
+                                    <option value="">Selecciona una categoría</option>
+                                    <option value="Muebles">Muebles</option>
+                                    <option value="Vajilla">Vajilla</option>
+                                    <option value="Electronica">Electrónica</option>
+                                    <option value="Linea blanca">Línea blanca</option>
+                                    <option value="Utensillos cocina">Utensilios de cocina</option>
+                                    <option value="Decoracion">Decoración</option>
+                                    <option value="Electrodomesticos">Electrodomésticos</option>
+                                </select>
+
                             {% else %}
                                 {{ field }}
                             {% endif %}
