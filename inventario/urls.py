@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, registro, listar_articulos, cargar_articulo, logout_view, detalle_articulo, editar_articulo, eliminar_articulo, generar_xls, redirigiendo
+from .views import index, registro, listar_articulos, cargar_articulo, logout_view, detalle_articulo, editar_articulo, eliminar_articulo, generar_xls, redirigiendo, articulos_card
 
 
 urlpatterns = [
@@ -13,6 +13,7 @@ urlpatterns = [
     path("articulo/<int:articulo_id>/eliminar/", eliminar_articulo, name="eliminar_articulo"),
     path("generar_xls/", generar_xls, name="generar_xls"),
     path("redirigiendo/", redirigiendo, name="redirigiendo"),
+    path("articulos_card/", articulos_card, name="articulos_card"),
 
 
 
