@@ -3,92 +3,60 @@
 {% block title %}Lista de Artículos{% endblock %}
 
 {% block content %}
-<section id="articulos" class="container-fluid mt-3 contenido">
-    <h2 class="text-center">Lista de Artículos</h2>
-    <p class="text-center">Aquí puedes ver todos los artículos cargados en el sistema.</p>
+<section id="articulos" class="container-fluid mt-3">
+    <h2 class="text-center">Artículos Disponibles</h2>
+    <p class="text-center">Explora los artículos cargados en el sistema con un diseño moderno.</p>
 
-    <div class="row justify-content-center mt-4">
-        <div class="col-12">
-            <div class="card p-4">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
-                    <h3 class="text-center mb-2 mb-md-0">Artículos Registrados</h3>
-                    <div class="d-flex flex-column flex-md-row">
-                        <a href="{% url 'cargar_articulo' %}" class="btn btn-success mb-2 mb-md-0 me-md-2">Cargar Artículo</a>
-                        <a href="{% url 'generar_xls' %}?asignacion={{ asignacion_filtrada }}&categoria={{ categoria_filtrada }}" class="btn btn-success">
-                            Descargar XLS Filtrado
-                        </a>
-                    </div>
-                </div>
+    <!-- 🔍 Filtros por Asignación y Categoría -->
+    <form method="GET" class="mb-4">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <label for="filtro_asignacion">Filtrar por Asignación:</label>
+                <select name="asignacion" id="filtro_asignacion" class="form-control" onchange="this.form.submit()">
+                    <option value="">-- Todos --</option>
+                    {% for asignacion in asignaciones_disponibles %}
+                        <option value="{{ asignacion }}" {% if asignacion == asignacion_filtrada %}selected{% endif %}>
+                            {{ asignacion }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="filtro_categoria">Filtrar por Categoría:</label>
+                <select name="categoria" id="filtro_categoria" class="form-control" onchange="this.form.submit()">
+                    <option value="">-- Todas --</option>
+                    {% for categoria in categorias_disponibles %}
+                        <option value="{{ categoria }}" {% if categoria == categoria_filtrada %}selected{% endif %}>
+                            {{ categoria }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </form>
 
-                <!-- 🔍 Filtros por Asignación y Categoría -->
-                <form method="GET" class="mb-3">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="filtro_asignacion">Filtrar por Asignación:</label>
-                            <select name="asignacion" id="filtro_asignacion" class="form-control" onchange="this.form.submit()">
-                                <option value="">-- Todos --</option>
-                                {% for asignacion in asignaciones_disponibles %}
-                                    <option value="{{ asignacion }}" {% if asignacion == asignacion_filtrada %}selected{% endif %}>
-                                        {{ asignacion }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="filtro_categoria">Filtrar por Categoría:</label>
-                            <select name="categoria" id="filtro_categoria" class="form-control" onchange="this.form.submit()">
-                                <option value="">-- Todas --</option>
-                                {% for categoria in categorias_disponibles %}
-                                    <option value="{{ categoria }}" {% if categoria == categoria_filtrada %}selected{% endif %}>
-                                        {{ categoria }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </form>
-
-                <!-- 🛠 Tabla de artículos -->
-                <div class="table-responsive">
-                    <table class="table table-striped w-100">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Cantidad</th>
-                                <th>Asignación</th>
-                                <th>Categoría</th>
-                                <th>Valor</th>
-                                <th>Foto</th>
-                                <th class="text-center">👁</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for articulo in articulos %}
-                            <tr>
-                                <td>{{ articulo.id }}</td>
-                                <td>{{ articulo.nombre }}</td>
-                                <td>{{ articulo.cantidad }}</td>
-                                <td>{{ articulo.asignacion }}</td>
-                                <td>{{ articulo.categoria }}</td>
-                                <td>${{ articulo.valor }}</td>
-                                <td>
-                                    {% if articulo.foto %}
-                                        <img src="{{ articulo.foto.url }}" alt="Foto de {{ articulo.nombre }}" class="img-thumbnail" width="50">
-                                    {% else %}
-                                        <span class="text-muted">Sin imagen</span>
-                                    {% endif %}
-                                </td>
-                                <td class="text-center">
-                                    <a href="{% url 'detalle_articulo' articulo.id %}" class="btn btn-link">Ver detalle</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+    <!-- 🛍 Diseño estilo Mercado Libre -->
+    <div class="row">
+        {% for articulo in articulos %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card shadow-sm h-100">
+                {% if articulo.foto %}
+                    <img src="{{ articulo.foto.url }}" class="card-img-top" alt="{{ articulo.nombre }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/200" class="card-img-top" alt="Imagen no disponible">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ articulo.nombre }}</h5>
+                    <p class="card-text">
+                        <strong>Precio:</strong> ${{ articulo.valor }} <br>
+                        <strong>Categoría:</strong> {{ articulo.categoria }} <br>
+                        <strong>Asignación:</strong> {{ articulo.asignacion }}
+                    </p>
+                    <a href="{% url 'detalle_articulo' articulo.id %}" class="btn btn-warning w-100">Ver Detalle</a>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </div>
 </section>
 {% endblock %}
