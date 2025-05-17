@@ -13,7 +13,57 @@
                 <h3 class="text-center">Formulario de Registro</h3>
                 <form method="POST">
                     {% csrf_token %}
-                    {{ form.as_p }}  <!-- Django genera los campos automáticamente -->
+
+                    <div class="mb-3">
+                        {{ form.username.label_tag }}
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <div class="text-danger">
+                                {{ form.username.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-danger">
+                                {{ form.email.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.email_confirm.label_tag }}
+                        {{ form.email_confirm }}
+                        {% if form.email_confirm.errors %}
+                            <div class="text-danger">
+                                {{ form.email_confirm.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.password1.label_tag }}
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <div class="text-danger">
+                                {{ form.password1.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.password2.label_tag }}
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <div class="text-danger">
+                                {{ form.password2.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
                     <div class="d-grid">
                         <button type="submit" class="btn btn-success">Registrarse</button>
                     </div>
@@ -23,8 +73,3 @@
     </div>
 </section>
 {% endblock %}
-
-
-
-
-

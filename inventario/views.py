@@ -21,6 +21,9 @@ from .models import Articulo
 import openpyxl
 from django.http import HttpResponse
 from .models import Articulo
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from .forms import RegistroForm
 
 
 
@@ -48,16 +51,38 @@ def index(request):
 
 
 
+
+
+
 def registro(request):
     if request.method == "POST":
         form = RegistroForm(request.POST)
         if form.is_valid():
             usuario = form.save(commit=False)
-            usuario.set_password(form.cleaned_data["password"])  # Encripta la contraseña
-            usuario.save()
-            return redirect("redirigiendo")
 
- # Redirige al login tras el registro
+            # Validación de correos electrónicos
+            email = form.cleaned_data.get("email")
+            email_confirm = form.cleaned_data.get("email_confirm")
+            username = form.cleaned_data.get("username")
+
+            # Verificar si el email ya está registrado
+            if User.objects.filter(email=email).exists():
+                form.add_error("email", "Este correo electrónico ya está registrado.")
+
+            # Verificar si el username ya está registrado
+            if User.objects.filter(username=username).exists():
+                form.add_error("username", "Este nombre de usuario ya está en uso.")
+
+            # Verificar que los correos electrónicos coincidan
+            if email != email_confirm:
+                form.add_error("email_confirm", "Los correos electrónicos no coinciden.")
+            
+            if not form.errors:  # Guardar usuario solo si no hay errores
+                usuario.set_password(form.cleaned_data["password1"])  # Encripta la contraseña
+                usuario.save()
+                login(request, usuario)  # Autenticación automática tras el registro
+                return redirect("redirigiendo")  # Redirige a la página correspondiente
+
     else:
         form = RegistroForm()
 
@@ -174,3 +199,4 @@ def generar_xls(request):
     wb.save(response)
 
     return response
+
