@@ -13,11 +13,38 @@
                 <h3 class="text-center">Formulario de Edición</h3>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ form.as_p }}
+
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+
+                            {% if field.name == "asignacion" %}
+                                <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="Romina" {% if field.value == "Romina" %}selected{% endif %}>Romina</option>
+                                    <option value="Carolina" {% if field.value == "Carolina" %}selected{% endif %}>Carolina</option>
+                                    <option value="Lucas" {% if field.value == "Lucas" %}selected{% endif %}>Lucas</option>
+                                    <option value="Soledad" {% if field.value == "Soledad" %}selected{% endif %}>Soledad</option>
+                                    <option value="Venta" {% if field.value == "Venta" %}selected{% endif %}>Venta</option>
+                                    <option value="Donacion" {% if field.value == "Donacion" %}selected{% endif %}>Donación</option>
+                                </select>
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+
+                            {% if field.errors %}
+                                <div class="text-danger">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
                     <div class="d-grid">
                         <button type="submit" class="btn btn-success">Guardar Cambios</button>
                     </div>
                 </form>
+
                 <div class="text-center mt-3">
                     <a href="{% url 'detalle_articulo' articulo.id %}" class="btn btn-secondary">Cancelar</a>
                 </div>
