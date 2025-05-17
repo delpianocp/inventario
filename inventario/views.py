@@ -102,17 +102,24 @@ def redirigiendo(request):
 @login_required
 def listar_articulos(request):
     asignacion_filtrada = request.GET.get("asignacion", None)
+    categoria_filtrada = request.GET.get("categoria", None)
     articulos = Articulo.objects.all()
 
     if asignacion_filtrada:
         articulos = articulos.filter(asignacion=asignacion_filtrada)
 
+    if categoria_filtrada:
+        articulos = articulos.filter(categoria=categoria_filtrada)
+
     asignaciones_disponibles = Articulo.objects.values_list("asignacion", flat=True).distinct()
+    categorias_disponibles = Articulo.objects.values_list("categoria", flat=True).distinct()
 
     return render(request, "inventario/articulos.html", {
         "articulos": articulos,
         "asignaciones_disponibles": asignaciones_disponibles,
+        "categorias_disponibles": categorias_disponibles,
         "asignacion_filtrada": asignacion_filtrada,
+        "categoria_filtrada": categoria_filtrada,
     })
 
 
