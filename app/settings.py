@@ -2,6 +2,10 @@ from pathlib import Path
 import os
 import dj_database_url
 from dotenv import load_dotenv
+import cloudinary
+
+
+
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -149,6 +153,9 @@ CLOUDINARY_STORAGE = {
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_URL = 'CLOUDINARY_URL=cloudinary://<464665576365125>:<Vayt6oR9UDicyFKCwKUi-Vz5j3g>@dxra3bnrm'
+
 
 
 
