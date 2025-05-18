@@ -156,8 +156,10 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CLOUDINARY_URL = 'CLOUDINARY_URL=cloudinary://<464665576365125>:<Vayt6oR9UDicyFKCwKUi-Vz5j3g>@dxra3bnrm'
 
-SESSION_COOKIE_AGE = 60  # 1800 segundos = 30 minutos
+SESSION_COOKIE_AGE = 1800  # 1800 segundos = 30 minutos
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # La sesión sigue abierta si el usuario no cierra el navegador
 SESSION_SAVE_EVERY_REQUEST = True  # Reinicia el contador de inactividad con cada petición
+
+LOGOUT_REDIRECT_URL = "/"
 
 
