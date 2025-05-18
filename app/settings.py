@@ -162,4 +162,5 @@ SESSION_SAVE_EVERY_REQUEST = True  # Reinicia el contador de inactividad con cad
 
 LOGOUT_REDIRECT_URL = "/"
 
+LOGIN_URL = "/"
 

@@ -96,7 +96,7 @@ def redirigiendo(request):
     
 
 
-@login_required(login_url='/index/')
+@login_required(login_url='/')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def listar_articulos(request):
     asignacion_filtrada = request.GET.get("asignacion", None)
