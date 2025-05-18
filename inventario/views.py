@@ -27,7 +27,7 @@ from .forms import RegistroForm
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from .forms import ArticuloForm
-
+from django.views.decorators.cache import cache_control
 
 def index(request):
     if request.method == "POST":
@@ -102,6 +102,7 @@ def redirigiendo(request):
 
 
 @login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def listar_articulos(request):
     asignacion_filtrada = request.GET.get("asignacion", None)
     categoria_filtrada = request.GET.get("categoria", None)
@@ -150,6 +151,7 @@ def articulos_card(request):
 
 
 @login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def cargar_articulo(request):
     if request.method == "POST":
         form = ArticuloForm(request.POST, request.FILES)
@@ -174,11 +176,13 @@ def logout_view(request):
     return redirect("index")
 
 @login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def detalle_articulo(request, articulo_id):
     articulo = get_object_or_404(Articulo, id=articulo_id)
     return render(request, "inventario/detalle_articulo.html", {"articulo": articulo})
 
 @login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def editar_articulo(request, articulo_id):
     articulo = get_object_or_404(Articulo, id=articulo_id)
     if request.method == "POST":
@@ -192,6 +196,7 @@ def editar_articulo(request, articulo_id):
     return render(request, "inventario/editar_articulo.html", {"form": form, "articulo": articulo})
 
 @login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def eliminar_articulo(request, articulo_id):
     articulo = get_object_or_404(Articulo, id=articulo_id)
     if request.method == "POST":
@@ -238,4 +243,5 @@ def generar_xls(request):
 
 def confirmacion_articulo(request):
     return render(request, "inventario/confirmacion_articulo.html")
+
 

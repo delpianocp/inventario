@@ -1,4 +1,9 @@
 {% extends "inventario/base.html" %}
+{% if not request.user.is_authenticated %}
+    <script>
+        window.location.href = "{% url 'index' %}";
+    </script>
+{% endif %}
 
 {% block title %}Carga de Artículos{% endblock %}
 
