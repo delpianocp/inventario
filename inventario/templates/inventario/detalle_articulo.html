@@ -14,7 +14,7 @@
                 <p><strong>Descripción:</strong> {{ articulo.descripcion }}</p>
                 <p><strong>Cantidad:</strong> {{ articulo.cantidad }}</p>
                 <p><strong>Asignación:</strong> {{ articulo.asignacion }}</p>
-                <p><strong>Categoría:</strong> {{ articulo.categoria }}</p>  <!-- Nuevo campo agregado -->
+                <p><strong>Categoría:</strong> {{ articulo.categoria }}</p> <!-- Nuevo campo agregado -->
                 <p><strong>Valor:</strong> ${{ articulo.valor }}</p>
                 <p><strong>Cargado por:</strong> {{ articulo.usuario.username }}</p> <!-- Muestra el usuario que lo registró -->
 
@@ -27,13 +27,37 @@
                 <div class="text-center mt-3">
                     <a href="{% url 'articulos' %}" class="btn btn-secondary">Volver a la lista</a>
                     <a href="{% url 'editar_articulo' articulo.id %}" class="btn btn-warning">Editar</a>
-                    <form method="POST" action="{% url 'eliminar_articulo' articulo.id %}" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                    </form>
+
+                    <!-- 🔴 Botón que activa el modal de confirmación -->
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmacionModal">
+                        Eliminar
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- 🛑 Modal de confirmación -->
+<div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="confirmacionModalLabel">¿Estás seguro?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ⚠️ Esta acción no se puede deshacer. ¿Realmente deseas eliminar "{{ articulo.nombre }}"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form method="POST" action="{% url 'eliminar_articulo' articulo.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
