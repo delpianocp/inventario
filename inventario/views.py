@@ -24,7 +24,9 @@ from .models import Articulo
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from .forms import RegistroForm
-
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from .forms import ArticuloForm
 
 
 def index(request):
@@ -155,7 +157,14 @@ def cargar_articulo(request):
             articulo = form.save(commit=False)  # No guardamos todavía
             articulo.usuario = request.user  # Asignamos el usuario autenticado
             articulo.save()  # Ahora sí guardamos
+            
+            # ✅ Mensaje de éxito
+            messages.success(request, "✅ Artículo cargado correctamente.")
             return redirect("articulos")
+        else:
+            # ❌ Mensaje de error si hay problemas con el formulario
+            messages.error(request, "❌ Hubo un error al cargar el artículo.")
+
     else:
         form = ArticuloForm()
 
