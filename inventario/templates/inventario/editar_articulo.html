@@ -11,7 +11,7 @@
         <div class="col-md-6">
             <div class="card p-4">
                 <h3 class="text-center">Formulario de Edición</h3>
-                <form method="POST" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data" id="formEditar">
                     {% csrf_token %}
 
                     {% for field in form %}
@@ -40,7 +40,7 @@
                                     <option value="Decoracion" {% if field.value == "Decoracion" %}selected{% endif %}>Decoración</option>
                                     <option value="Electrodomesticos" {% if field.value == "Electrodomesticos" %}selected{% endif %}>Electrodomésticos</option>
                                     <option value="Herramientas" {% if field.value == "Herramientas" %}selected{% endif %}>Herramientas</option>
-                                    <option value="Otras_utilidades" {% if field.value == "Otras_utilidades" %}selected{% endif %}>Otras_utilidades</option>
+                                    <option value="Otras_utilidades" {% if field.value == "Otras_utilidades" %}selected{% endif %}>Otras utilidades</option>
                                 </select>
 
                             {% else %}
@@ -56,7 +56,10 @@
                     {% endfor %}
 
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                        <!-- 🟢 Botón que activa el modal -->
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmacionEditarModal">
+                            Guardar Cambios
+                        </button>
                     </div>
                 </form>
 
@@ -67,4 +70,24 @@
         </div>
     </div>
 </section>
+
+<!-- 🟢 Modal de confirmación para guardar -->
+<div class="modal fade" id="confirmacionEditarModal" tabindex="-1" aria-labelledby="confirmacionEditarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-success" id="confirmacionEditarLabel">¿Confirmar cambios?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ⚠️ Vas a modificar "{{ articulo.nombre }}". ¿Estás seguro de que deseas guardar los cambios?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="formEditar" class="btn btn-success">Confirmar Guardado</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
