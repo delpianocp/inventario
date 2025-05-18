@@ -52,4 +52,13 @@
         </div>
     </div>
 </section>
+
+<!-- 🔧 Script para limpiar campos al cargar la página -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("id_email").value = "";
+        document.getElementById("id_password").value = "";
+    });
+</script>
+
 {% endblock %}
