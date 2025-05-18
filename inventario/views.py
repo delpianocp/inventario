@@ -51,11 +51,6 @@ def index(request):
     
     return render(request, "inventario/index.html", {"form": form, "show_inicio": False})
 
-
-
-
-
-
 def registro(request):
     if request.method == "POST":
         form = RegistroForm(request.POST)
@@ -101,7 +96,7 @@ def redirigiendo(request):
     
 
 
-@login_required
+@login_required(login_url='/index/')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def listar_articulos(request):
     asignacion_filtrada = request.GET.get("asignacion", None)
