@@ -1,0 +1,20 @@
+{% extends "inventario/base.html" %}
+
+{% block title %}Confirmación{% endblock %}
+
+{% block content %}
+<section id="confirmacion" class="container mt-5 text-center">
+    <div class="card p-4">
+        <h2 class="text-success">✅ ¡Artículo cargado con éxito!</h2>
+        <p>Serás redirigido a la lista de artículos en unos segundos...</p>
+        <a href="{% url 'articulos' %}" class="btn btn-primary mt-3">Ir ahora</a>
+    </div>
+</section>
+
+<script>
+    setTimeout(function() {
+        window.location.href = "{% url 'articulos' %}";
+    }, 3000); // Redirige en 3 segundos
+</script>
+
+{% endblock %}

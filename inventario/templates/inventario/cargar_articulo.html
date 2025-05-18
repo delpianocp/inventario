@@ -7,19 +7,6 @@
     <h2 class="text-center">Carga de Artículos</h2>
     <p class="text-center">Ingresa los detalles del artículo para registrarlo en el sistema.</p>
 
-    <!-- ✅ Bloque de Mensajes -->
-    {% if messages %}
-        <div class="container mt-3">
-            {% for message in messages %}
-                <div class="alert 
-                    {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% elif message.tags == 'warning' %}alert-warning{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-
     <div class="row justify-content-center mt-4">
         <div class="col-md-6">
             <div class="card shadow p-4">
@@ -35,6 +22,7 @@
                                 <textarea id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control" rows="3">{{ field.value|default_if_none:"" }}</textarea>
 
                             {% elif field.name == "asignacion" %}
+                                <!-- Campo Select para Asignación -->
                                 <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
                                     <option value="">Selecciona una opción</option>
                                     <option value="Romina">Romina</option>
@@ -46,6 +34,7 @@
                                 </select>
 
                             {% elif field.name == "categoria" %}
+                                <!-- Campo Select para Categoría -->
                                 <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
                                     <option value="">Selecciona una categoría</option>
                                     <option value="Muebles">Muebles</option>

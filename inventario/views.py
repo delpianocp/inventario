@@ -154,21 +154,19 @@ def cargar_articulo(request):
     if request.method == "POST":
         form = ArticuloForm(request.POST, request.FILES)
         if form.is_valid():
-            articulo = form.save(commit=False)  # No guardamos todavía
-            articulo.usuario = request.user  # Asignamos el usuario autenticado
-            articulo.save()  # Ahora sí guardamos
-            
-            # ✅ Mensaje de éxito
+            articulo = form.save(commit=False)
+            articulo.usuario = request.user  
+            articulo.save()
+
             messages.success(request, "✅ Artículo cargado correctamente.")
-            return redirect("articulos")
+            return redirect("confirmacion_articulo")  # Redirige a la página de confirmación
         else:
-            # ❌ Mensaje de error si hay problemas con el formulario
             messages.error(request, "❌ Hubo un error al cargar el artículo.")
 
     else:
         form = ArticuloForm()
 
-    return render(request, "inventario/cargar_articulo.html", {"form": form, "show_inicio": False})
+    return render(request, "inventario/cargar_articulo.html", {"form": form})
 
 @login_required
 def logout_view(request):
@@ -237,4 +235,7 @@ def generar_xls(request):
     wb.save(response)
 
     return response
+
+def confirmacion_articulo(request):
+    return render(request, "inventario/confirmacion_articulo.html")
 
