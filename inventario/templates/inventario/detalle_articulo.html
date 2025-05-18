@@ -14,9 +14,9 @@
                 <p><strong>Descripción:</strong> {{ articulo.descripcion }}</p>
                 <p><strong>Cantidad:</strong> {{ articulo.cantidad }}</p>
                 <p><strong>Asignación:</strong> {{ articulo.asignacion }}</p>
-                <p><strong>Categoría:</strong> {{ articulo.categoria }}</p> <!-- Nuevo campo agregado -->
+                <p><strong>Categoría:</strong> {{ articulo.categoria }}</p>
                 <p><strong>Valor:</strong> ${{ articulo.valor }}</p>
-                <p><strong>Cargado por:</strong> {{ articulo.usuario.username }}</p> <!-- Muestra el usuario que lo registró -->
+                <p><strong>Cargado por:</strong> {{ articulo.usuario.username }}</p>
 
                 {% if articulo.foto %}
                     <img src="{{ articulo.foto.url }}" alt="Foto de {{ articulo.nombre }}" class="img-fluid">
@@ -26,10 +26,14 @@
 
                 <div class="text-center mt-3">
                     <a href="{% url 'articulos' %}" class="btn btn-secondary">Volver a la lista</a>
-                    <a href="{% url 'editar_articulo' articulo.id %}" class="btn btn-warning">Editar</a>
 
-                    <!-- 🔴 Botón que activa el modal de confirmación -->
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmacionModal">
+                    <!-- 🟡 Botón que activa el modal de confirmación de edición -->
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#confirmacionEditarModal">
+                        Editar
+                    </button>
+
+                    <!-- 🔴 Botón que activa el modal de confirmación de eliminación -->
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmacionEliminarModal">
                         Eliminar
                     </button>
                 </div>
@@ -38,12 +42,31 @@
     </div>
 </section>
 
-<!-- 🛑 Modal de confirmación -->
-<div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel" aria-hidden="true">
+<!-- 🟡 Modal de confirmación para editar -->
+<div class="modal fade" id="confirmacionEditarModal" tabindex="-1" aria-labelledby="confirmacionEditarLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-danger" id="confirmacionModalLabel">¿Estás seguro?</h5>
+                <h5 class="modal-title text-warning" id="confirmacionEditarLabel">¿Confirmar edición?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ⚠️ Vas a editar "{{ articulo.nombre }}". Asegúrate de revisar los cambios antes de guardar.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a href="{% url 'editar_articulo' articulo.id %}" class="btn btn-warning">Confirmar Edición</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 🛑 Modal de confirmación para eliminar -->
+<div class="modal fade" id="confirmacionEliminarModal" tabindex="-1" aria-labelledby="confirmacionEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="confirmacionEliminarLabel">¿Estás seguro?</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
