@@ -58,7 +58,7 @@
                     {% endif %}
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ articulo.nombre }}</h5>
+                    <h4 class="card-title text-dark fw-bold text-uppercase">{{ articulo.nombre }}</h4>
                     <p class="card-text">
                         <strong>Precio:</strong> ${{ articulo.valor }} <br>
                         <strong>Categoría:</strong> {{ articulo.categoria }} <br>
@@ -73,6 +73,14 @@
 </section>
 
 <style>
+    .card-title {
+        font-size: 1.4rem; /* Aumenta el tamaño */
+        font-weight: bold; /* Hace el título más grueso */
+        text-transform: uppercase; /* Convierte a mayúsculas */
+        color: #343a40; /* Color oscuro */
+        text-align: center; /* Centra el texto */
+    }
+
     .card-img-top {
         width: 100%;
         height: 200px; /* Ajusta la altura según lo necesites */
