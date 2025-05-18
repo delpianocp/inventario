@@ -120,7 +120,7 @@ def listar_articulos(request):
         "categoria_filtrada": categoria_filtrada,
     })
 
-@login_required
+@login_required(login_url='/')
 def articulos_card(request):
     asignacion_filtrada = request.GET.get("asignacion", None)
     categoria_filtrada = request.GET.get("categoria", None)
@@ -145,7 +145,7 @@ def articulos_card(request):
 
 
 
-@login_required
+@login_required(login_url='/')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def cargar_articulo(request):
     if request.method == "POST":
@@ -165,18 +165,18 @@ def cargar_articulo(request):
 
     return render(request, "inventario/cargar_articulo.html", {"form": form})
 
-@login_required
+@login_required(login_url='/')
 def logout_view(request):
     logout(request)
     return redirect("index")
 
-@login_required
+@login_required(login_url='/')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def detalle_articulo(request, articulo_id):
     articulo = get_object_or_404(Articulo, id=articulo_id)
     return render(request, "inventario/detalle_articulo.html", {"articulo": articulo})
 
-@login_required
+@login_required(login_url='/')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def editar_articulo(request, articulo_id):
     articulo = get_object_or_404(Articulo, id=articulo_id)
@@ -190,7 +190,7 @@ def editar_articulo(request, articulo_id):
 
     return render(request, "inventario/editar_articulo.html", {"form": form, "articulo": articulo})
 
-@login_required
+@login_required(login_url='/')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def eliminar_articulo(request, articulo_id):
     articulo = get_object_or_404(Articulo, id=articulo_id)
@@ -201,7 +201,7 @@ def eliminar_articulo(request, articulo_id):
     return render(request, "inventario/eliminar_articulo.html", {"articulo": articulo})
 
 
-
+@login_required(login_url='/')
 def generar_xls(request):
     asignacion_filtrada = request.GET.get("asignacion", None)
     articulos = Articulo.objects.all()
