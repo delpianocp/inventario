@@ -17,16 +17,16 @@ import time
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.views import LoginView
-from .models import Articulo
+
 import openpyxl
-from django.http import HttpResponse
-from .models import Articulo
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
-from .forms import RegistroForm
+
+
+
+
+
 from django.contrib import messages
-from django.shortcuts import redirect, render
-from .forms import ArticuloForm
+
+
 from django.views.decorators.cache import cache_control
 
 def index(request):
