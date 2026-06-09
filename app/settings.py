@@ -139,7 +139,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-CSRF_TRUSTED_ORIGINS = ['http://*','https://inventario-production-886b.up.railway.app']
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://inventario-production-886b.up.railway.app",
+    "http://inventario-production-886b.up.railway.app",
+]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"  # Cambia esto si usas otro proveedor
