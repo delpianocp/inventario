@@ -91,7 +91,7 @@ def redirigiendo(request):
             subject = "¡Registro exitoso!"
             message = f"Hola {request.user.username},\n\n¡Tu registro ha sido exitoso! Bienvenido."
             recipient_email = request.user.email
-            send_mail(subject, message, settings.EMAIL_HOST_USER, [recipient_email])
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
         except Exception as e:
             print(f"ERROR EMAIL: {e}")
         
