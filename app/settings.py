@@ -147,14 +147,13 @@ CSRF_TRUSTED_ORIGINS = [
     "http://inventario-production-886b.up.railway.app",
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"  # Cambia esto si usas otro proveedor
-EMAIL_PORT = 587
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.elasticemail.com'
+EMAIL_PORT = 2525
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "principal83@gmail.com"
-EMAIL_HOST_PASSWORD = "shsz flke kkbj ejrh"  # ⚠️ Usa variables de entorno para mayor seguridad
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
+EMAIL_HOST_USER = 'principal83@gmail.com'
+EMAIL_HOST_PASSWORD = '88644A68CF084AE4F25DB88CB9D59D457859C2A2489BF25E921E6124BDBB222C461C0621B66380499D80DD91C887E751'
+DEFAULT_FROM_EMAIL = 'principal83@gmail.com'
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dxra3bnrm',
