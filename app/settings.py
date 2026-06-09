@@ -146,7 +146,7 @@ EMAIL_HOST = "smtp.gmail.com"  # Cambia esto si usas otro proveedor
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "principal83@gmail.com"
-EMAIL_HOST_PASSWORD = "mlxc qhpt jyhu sycb"  # ⚠️ Usa variables de entorno para mayor seguridad
+EMAIL_HOST_PASSWORD = "shsz flke kkbj ejrh"  # ⚠️ Usa variables de entorno para mayor seguridad
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
