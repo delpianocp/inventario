@@ -86,11 +86,14 @@ def registro(request):
     return render(request, "inventario/registro.html", {"form": form, "show_inicio": True})
 
 def redirigiendo(request):
-    if request.user.is_authenticated:  # Verificamos si hay un usuario autenticado
-        subject = "¡Registro exitoso!"
-        message = f"Hola {request.user.username},\n\n¡Tu registro ha sido exitoso! Bienvenido."
-        recipient_email = request.user.email
-        send_mail(subject, message, settings.EMAIL_HOST_USER, [recipient_email])
+    if request.user.is_authenticated and request.user.email:
+        try:
+            subject = "¡Registro exitoso!"
+            message = f"Hola {request.user.username},\n\n¡Tu registro ha sido exitoso! Bienvenido."
+            recipient_email = request.user.email
+            send_mail(subject, message, settings.EMAIL_HOST_USER, [recipient_email])
+        except Exception as e:
+            print(f"ERROR EMAIL: {e}")
         
     return render(request, "inventario/redirigiendo.html")
     
