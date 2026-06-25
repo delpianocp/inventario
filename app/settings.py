@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 #import dj_database_url
+
 import dj_database_url
 from dotenv import load_dotenv
 import cloudinary
@@ -35,10 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
+    'anymail',  
     'inventario',
     'cloudinary',
     'cloudinary_storage',
-
 ]
 
 MIDDLEWARE = [
@@ -148,10 +149,10 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 ANYMAIL = {
-    "ELASTIC_EMAIL_API_KEY": "88644A68CF084AE4F25DB88CB9D59D457859C2A2489BF25E921E6124BDBB222C461C0621B66380499D80DD91C887E751",
+    "RESEND_API_KEY": "re_CsRV4yK9_3h8doF8hit4se3UYsKbrmueZ",
 }
-EMAIL_BACKEND = "anymail.backends.elasticemail.EmailBackend"
-DEFAULT_FROM_EMAIL = "principal83@gmail.com"
+EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
+DEFAULT_FROM_EMAIL = "onboarding@resend.dev"
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dxra3bnrm',
