@@ -4,7 +4,7 @@
 <section class="container mt-3 contenido">
     <div class="row justify-content-center mt-4">
         <div class="col-md-5">
-            <div class="card p-4 shadow-sm">
+            <div class="card p-4 shadow-sm" style="border-radius:12px">
 
                 <div class="text-center mb-4">
                     <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:56px;height:56px">
@@ -29,15 +29,20 @@
 
                 <form method="POST" autocomplete="off">
                     {% csrf_token %}
-                    <div class="mb-4">
+                    <div style="margin-bottom:32px">
                         <label for="id_email" class="form-label small fw-semibold text-secondary">Correo electrónico</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-transparent"><i class="bi bi-envelope"></i></span>
-                            <input type="email" name="email" id="id_email" class="form-control" placeholder="tu@email.com" required>
+                        <div style="display:flex;align-items:center;border:1px solid #D1D5DB;border-radius:8px;padding:0 12px;height:42px;gap:10px;background:#fff">
+                            <i class="bi bi-envelope" style="font-size:17px;color:#9CA3AF;flex-shrink:0"></i>
+                            <input type="email" name="email" id="id_email"
+                                placeholder="tu@email.com"
+                                style="border:none;outline:none;background:transparent;font-size:14px;width:100%"
+                                onfocus="this.placeholder=''"
+                                onblur="this.placeholder='tu@email.com'"
+                                required>
                         </div>
                     </div>
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-warning text-dark fw-semibold">
+                        <button type="submit" class="btn btn-warning text-dark fw-semibold" style="height:42px">
                             <i class="bi bi-send me-2"></i>Enviar código
                         </button>
                     </div>
