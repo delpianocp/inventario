@@ -1,0 +1,24 @@
+{% extends "inventario/base.html" %}
+{% block title %}Verificar Código{% endblock %}
+{% block content %}
+<section class="container mt-3 contenido">
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h3 class="text-center">Ingresá el Código</h3>
+                <p class="text-center">Revisá tu email e ingresá el código de 6 dígitos.</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-grid mt-3">
+                        <button type="submit" class="btn btn-primary">Verificar</button>
+                    </div>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="{% url 'solicitar_recuperacion' %}">Pedir otro código</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
