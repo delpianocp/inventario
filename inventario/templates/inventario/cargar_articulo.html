@@ -1,76 +1,116 @@
 {% extends "inventario/base.html" %}
-{% if not request.user.is_authenticated %}
-    <script>
-        window.location.href = "{% url 'index' %}";
-    </script>
-{% endif %}
-
-{% block title %}Carga de Artículos{% endblock %}
+{% block title %}Cargar Artículo{% endblock %}
 
 {% block content %}
 <section id="cargar_articulos" class="container mt-3 contenido">
-    <h2 class="text-center">Carga de Artículos</h2>
-    <p class="text-center">Ingresa los detalles del artículo para registrarlo en el sistema.</p>
 
-    <div class="row justify-content-center mt-4">
+    <div class="d-flex align-items-center gap-2 mb-3">
+        <a href="{% url 'articulos' %}" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1">
+            <i class="bi bi-arrow-left"></i>Volver
+        </a>
+        <span class="text-muted small">Artículos / Nuevo</span>
+    </div>
+
+    <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow p-4">
-                <h3 class="text-center mb-3">Formulario de Registro</h3>
+            <div class="card border shadow-sm p-4" style="border-radius:12px">
+
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                        <i class="bi bi-plus-lg text-success"></i>
+                    </div>
+                    <div>
+                        <h2 class="h5 fw-semibold mb-0">Nuevo artículo</h2>
+                        <p class="text-muted small mb-0">Completá los datos para registrarlo</p>
+                    </div>
+                </div>
+
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    
+
                     {% for field in form %}
-                        <div class="mb-3">
-                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label small fw-semibold text-secondary">{{ field.label }}</label>
 
-                            {% if field.name == "descripcion" %}
-                                <textarea id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control" rows="3">{{ field.value|default_if_none:"" }}</textarea>
+                        {% if field.name == "descripcion" %}
+                            <textarea id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control" rows="3" placeholder="Descripción del artículo">{{ field.value|default_if_none:"" }}</textarea>
 
-                            {% elif field.name == "asignacion" %}
-                                <!-- Campo Select para Asignación -->
-                                <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
-                                    <option value="">Selecciona una opción</option>
-                                    <option value="Romina">Romina</option>
-                                    <option value="Carolina">Carolina</option>
-                                    <option value="Lucas">Lucas</option>
-                                    <option value="Soledad">Soledad</option>
-                                    <option value="Venta">Venta</option>
-                                    <option value="Donacion">Donación</option>
-                                </select>
+                        {% elif field.name == "asignacion" %}
+                            <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-select">
+                                <option value="">Seleccioná una opción</option>
+                                <option value="Romina">Romina</option>
+                                <option value="Carolina">Carolina</option>
+                                <option value="Lucas">Lucas</option>
+                                <option value="Soledad">Soledad</option>
+                                <option value="Venta">Venta</option>
+                                <option value="Donacion">Donación</option>
+                            </select>
 
-                            {% elif field.name == "categoria" %}
-                                <!-- Campo Select para Categoría -->
-                                <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
-                                    <option value="">Selecciona una categoría</option>
-                                    <option value="Muebles">Muebles</option>
-                                    <option value="Vajilla">Vajilla</option>
-                                    <option value="Electronica">Electrónica</option>
-                                    <option value="Linea blanca">Línea blanca</option>
-                                    <option value="Utensillos cocina">Utensilios de cocina</option>
-                                    <option value="Decoracion">Decoración</option>
-                                    <option value="Electrodomesticos">Electrodomésticos</option>
-                                    <option value="Herramientas">Herramientas</option>
-                                    <option value="Otras_utilidades">Otras utilidades</option>
-                                </select>
+                        {% elif field.name == "categoria" %}
+                            <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-select">
+                                <option value="">Seleccioná una categoría</option>
+                                <option value="Muebles">Muebles</option>
+                                <option value="Vajilla">Vajilla</option>
+                                <option value="Electronica">Electrónica</option>
+                                <option value="Linea blanca">Línea blanca</option>
+                                <option value="Utensillos cocina">Utensilios de cocina</option>
+                                <option value="Decoracion">Decoración</option>
+                                <option value="Electrodomesticos">Electrodomésticos</option>
+                                <option value="Herramientas">Herramientas</option>
+                                <option value="Otras_utilidades">Otras utilidades</option>
+                            </select>
 
-                            {% else %}
+                        {% elif field.name == "valor" %}
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent">$</span>
                                 {{ field }}
-                            {% endif %}
+                            </div>
 
-                            {% if field.errors %}
-                                <div class="text-danger">
-                                    {{ field.errors }}
-                                </div>
-                            {% endif %}
-                        </div>
+                        {% elif field.name == "foto" %}
+                            <div class="border rounded-3 p-3 text-center" style="border-style:dashed!important;cursor:pointer" onclick="document.getElementById('{{ field.id_for_label }}').click()">
+                                <i class="bi bi-cloud-upload fs-4 text-muted"></i>
+                                <p class="text-muted small mb-1 mt-1">Hacé click para subir una imagen</p>
+                                <p class="text-muted small mb-2">PNG, JPG hasta 10MB</p>
+                                {{ field }}
+                            </div>
+
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
                     {% endfor %}
 
-                    <div class="text-center mt-3">
-                        <button type="submit" class="btn btn-success px-4 py-2">Guardar Artículo</button>
+                    <div class="d-flex gap-2 mt-4">
+                        <a href="{% url 'articulos' %}" class="btn btn-outline-secondary flex-fill">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success fw-semibold flex-fill d-flex align-items-center justify-content-center gap-1">
+                            <i class="bi bi-check-lg"></i>Guardar artículo
+                        </button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    const fotoInput = document.querySelector('input[type="file"]');
+    if (fotoInput) {
+        fotoInput.style.display = 'none';
+        fotoInput.addEventListener('change', () => {
+            const label = fotoInput.closest('.border');
+            if (fotoInput.files.length > 0) {
+                label.querySelector('p').textContent = fotoInput.files[0].name;
+                label.style.borderColor = 'var(--bs-success)';
+            }
+        });
+    }
+</script>
+
 {% endblock %}

@@ -1,95 +1,116 @@
 {% extends "inventario/base.html" %}
-{% if not request.user.is_authenticated %}
-    <script>
-        window.location.href = "{% url 'index' %}";
-    </script>
-{% endif %}
-
 {% block title %}Editar {{ articulo.nombre }}{% endblock %}
 
 {% block content %}
 <section id="editar_articulo" class="container mt-3 contenido">
-    <h2 class="text-center">Editar Artículo</h2>
-    <p class="text-center">Modifica los detalles de "{{ articulo.nombre }}".</p>
 
-    <div class="row justify-content-center mt-4">
+    <div class="d-flex align-items-center gap-2 mb-3">
+        <a href="{% url 'detalle_articulo' articulo.id %}" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1">
+            <i class="bi bi-arrow-left"></i>Volver
+        </a>
+        <span class="text-muted small">Artículos / {{ articulo.nombre }} / Editar</span>
+    </div>
+
+    <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card p-4">
-                <h3 class="text-center">Formulario de Edición</h3>
+            <div class="card border shadow-sm p-4" style="border-radius:12px">
+
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:40px;height:40px">
+                        <i class="bi bi-pencil text-warning"></i>
+                    </div>
+                    <div>
+                        <h2 class="h5 fw-semibold mb-0">Editar artículo</h2>
+                        <p class="text-muted small mb-0">{{ articulo.nombre }}</p>
+                    </div>
+                </div>
+
                 <form method="POST" enctype="multipart/form-data" id="formEditar">
                     {% csrf_token %}
 
                     {% for field in form %}
-                        <div class="mb-3">
-                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label small fw-semibold text-secondary">{{ field.label }}</label>
 
-                            {% if field.name == "asignacion" %}
-                                <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
-                                    <option value="">Selecciona una opción</option>
-                                    <option value="Romina" {% if field.value == "Romina" %}selected{% endif %}>Romina</option>
-                                    <option value="Carolina" {% if field.value == "Carolina" %}selected{% endif %}>Carolina</option>
-                                    <option value="Lucas" {% if field.value == "Lucas" %}selected{% endif %}>Lucas</option>
-                                    <option value="Soledad" {% if field.value == "Soledad" %}selected{% endif %}>Soledad</option>
-                                    <option value="Venta" {% if field.value == "Venta" %}selected{% endif %}>Venta</option>
-                                    <option value="Donacion" {% if field.value == "Donacion" %}selected{% endif %}>Donación</option>
-                                </select>
+                        {% if field.name == "asignacion" %}
+                            <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-select">
+                                <option value="">Seleccioná una opción</option>
+                                <option value="Romina" {% if field.value == "Romina" %}selected{% endif %}>Romina</option>
+                                <option value="Carolina" {% if field.value == "Carolina" %}selected{% endif %}>Carolina</option>
+                                <option value="Lucas" {% if field.value == "Lucas" %}selected{% endif %}>Lucas</option>
+                                <option value="Soledad" {% if field.value == "Soledad" %}selected{% endif %}>Soledad</option>
+                                <option value="Venta" {% if field.value == "Venta" %}selected{% endif %}>Venta</option>
+                                <option value="Donacion" {% if field.value == "Donacion" %}selected{% endif %}>Donación</option>
+                            </select>
 
-                            {% elif field.name == "categoria" %}
-                                <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control">
-                                    <option value="">Selecciona una categoría</option>
-                                    <option value="Muebles" {% if field.value == "Muebles" %}selected{% endif %}>Muebles</option>
-                                    <option value="Vajilla" {% if field.value == "Vajilla" %}selected{% endif %}>Vajilla</option>
-                                    <option value="Electronica" {% if field.value == "Electronica" %}selected{% endif %}>Electrónica</option>
-                                    <option value="Linea blanca" {% if field.value == "Linea blanca" %}selected{% endif %}>Línea blanca</option>
-                                    <option value="Utensillos cocina" {% if field.value == "Utensillos cocina" %}selected{% endif %}>Utensilios de cocina</option>
-                                    <option value="Decoracion" {% if field.value == "Decoracion" %}selected{% endif %}>Decoración</option>
-                                    <option value="Electrodomesticos" {% if field.value == "Electrodomesticos" %}selected{% endif %}>Electrodomésticos</option>
-                                    <option value="Herramientas" {% if field.value == "Herramientas" %}selected{% endif %}>Herramientas</option>
-                                    <option value="Otras_utilidades" {% if field.value == "Otras_utilidades" %}selected{% endif %}>Otras utilidades</option>
-                                </select>
+                        {% elif field.name == "categoria" %}
+                            <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-select">
+                                <option value="">Seleccioná una categoría</option>
+                                <option value="Muebles" {% if field.value == "Muebles" %}selected{% endif %}>Muebles</option>
+                                <option value="Vajilla" {% if field.value == "Vajilla" %}selected{% endif %}>Vajilla</option>
+                                <option value="Electronica" {% if field.value == "Electronica" %}selected{% endif %}>Electrónica</option>
+                                <option value="Linea blanca" {% if field.value == "Linea blanca" %}selected{% endif %}>Línea blanca</option>
+                                <option value="Utensillos cocina" {% if field.value == "Utensillos cocina" %}selected{% endif %}>Utensilios de cocina</option>
+                                <option value="Decoracion" {% if field.value == "Decoracion" %}selected{% endif %}>Decoración</option>
+                                <option value="Electrodomesticos" {% if field.value == "Electrodomesticos" %}selected{% endif %}>Electrodomésticos</option>
+                                <option value="Herramientas" {% if field.value == "Herramientas" %}selected{% endif %}>Herramientas</option>
+                                <option value="Otras_utilidades" {% if field.value == "Otras_utilidades" %}selected{% endif %}>Otras utilidades</option>
+                            </select>
 
-                            {% else %}
+                        {% elif field.name == "descripcion" %}
+                            <textarea id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control" rows="3">{{ field.value|default:'' }}</textarea>
+
+                        {% else %}
+                            <div class="input-group">
+                                {% if field.name == "valor" %}
+                                    <span class="input-group-text bg-transparent">$</span>
+                                {% endif %}
                                 {{ field }}
-                            {% endif %}
+                            </div>
+                        {% endif %}
 
-                            {% if field.errors %}
-                                <div class="text-danger">
-                                    {{ field.errors }}
-                                </div>
-                            {% endif %}
-                        </div>
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
                     {% endfor %}
 
-                    <div class="d-grid">
-                        <!-- 🟢 Botón que activa el modal -->
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmacionEditarModal">
-                            Guardar Cambios
+                    <div class="d-flex gap-2 mt-4">
+                        <a href="{% url 'detalle_articulo' articulo.id %}" class="btn btn-outline-secondary flex-fill">
+                            Cancelar
+                        </a>
+                        <button type="button" class="btn btn-success fw-semibold flex-fill d-flex align-items-center justify-content-center gap-1"
+                            data-bs-toggle="modal" data-bs-target="#confirmacionEditarModal">
+                            <i class="bi bi-check-lg"></i>Guardar cambios
                         </button>
                     </div>
                 </form>
 
-                <div class="text-center mt-3">
-                    <a href="{% url 'detalle_articulo' articulo.id %}" class="btn btn-secondary">Cancelar</a>
-                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- 🟢 Modal de confirmación para guardar -->
-<div class="modal fade" id="confirmacionEditarModal" tabindex="-1" aria-labelledby="confirmacionEditarLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-success" id="confirmacionEditarLabel">¿Confirmar cambios?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+<div class="modal fade" id="confirmacionEditarModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:36px;height:36px">
+                        <i class="bi bi-check-circle text-success"></i>
+                    </div>
+                    <h5 class="modal-title fw-semibold mb-0">Confirmar cambios</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
-                ⚠️ Vas a modificar "{{ articulo.nombre }}". ¿Estás seguro de que deseas guardar los cambios?
+            <div class="modal-body pt-2">
+                <p class="text-muted small mb-0">Vas a guardar los cambios en <strong>{{ articulo.nombre }}</strong>. ¿Confirmás?</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" form="formEditar" class="btn btn-success">Confirmar Guardado</button>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="formEditar" class="btn btn-sm btn-success fw-semibold">
+                    <i class="bi bi-check-lg me-1"></i>Confirmar
+                </button>
             </div>
         </div>
     </div>

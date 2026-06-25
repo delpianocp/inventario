@@ -1,78 +1,102 @@
 {% extends "inventario/base.html" %}
-{% if not request.user.is_authenticated %}
-    <script>
-        window.location.href = "{% url 'index' %}";
-    </script>
-{% endif %}
-
 {% block title %}Detalles de {{ articulo.nombre }}{% endblock %}
 
 {% block content %}
 <section id="detalle_articulo" class="container mt-3 contenido">
-    <h2 class="text-center">Detalles del Artículo</h2>
-    <p class="text-center">Información detallada sobre "{{ articulo.nombre }}".</p>
 
-    <div class="row justify-content-center mt-4">
+    <div class="d-flex align-items-center gap-2 mb-3">
+        <a href="{% url 'articulos' %}" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1">
+            <i class="bi bi-arrow-left"></i>Volver
+        </a>
+        <span class="text-muted small">Artículos / Detalle</span>
+    </div>
+
+    <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card p-4">
-                <h3 class="card-title text-dark fw-bold text-uppercase text-center">{{ articulo.nombre }}</h3>
-                <p><strong>Descripción:</strong> {{ articulo.descripcion }}</p>
-                <p><strong>Cantidad:</strong> {{ articulo.cantidad }}</p>
-                <p><strong>Asignación:</strong> {{ articulo.asignacion }}</p>
-                <p><strong>Categoría:</strong> {{ articulo.categoria }}</p>
-                <p><strong>Valor:</strong> ${{ articulo.valor }}</p>
-                <p><strong>Cargado por:</strong> {{ articulo.usuario.username }}</p>
+            <div class="card border shadow-sm overflow-hidden" style="border-radius:12px">
 
                 {% if articulo.foto %}
-                    <img src="{{ articulo.foto.url }}" alt="Foto de {{ articulo.nombre }}" class="img-fluid">
+                    <img src="{{ articulo.foto.url }}" alt="{{ articulo.nombre }}" style="width:100%;height:220px;object-fit:cover">
                 {% else %}
-                    <p class="text-muted text-center">Sin imagen disponible</p>
+                    <div class="bg-light d-flex align-items-center justify-content-center" style="height:220px">
+                        <i class="bi bi-image fs-1 text-muted"></i>
+                    </div>
                 {% endif %}
 
-                <div class="text-center mt-3">
-                    <a href="{% url 'articulos' %}" class="btn btn-secondary">Volver a la lista</a>
-                    <a href="{% url 'editar_articulo' articulo.id %}" class="btn btn-warning">Editar</a>
+                <div class="card-body p-4">
 
-                    <!-- 🔴 Botón que activa el modal de confirmación -->
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmacionModal">
-                        Eliminar
-                    </button>
+                    <div class="d-flex align-items-start justify-content-between mb-2">
+                        <div>
+                            <h2 class="h5 fw-semibold mb-1">{{ articulo.nombre }}</h2>
+                            <span class="badge bg-light text-dark border small">{{ articulo.categoria }}</span>
+                        </div>
+                        <p class="fs-4 fw-bold text-success mb-0">${{ articulo.valor }}</p>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <p class="text-muted small mb-0">Descripción</p>
+                            <p class="mb-0 small fw-semibold">{{ articulo.descripcion }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-muted small mb-0">Cantidad</p>
+                            <p class="mb-0 small fw-semibold">{{ articulo.cantidad }} unidades</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-muted small mb-0">Asignación</p>
+                            <p class="mb-0 small fw-semibold">{{ articulo.asignacion }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-muted small mb-0">Cargado por</p>
+                            <p class="mb-0 small fw-semibold">{{ articulo.usuario.username }}</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'editar_articulo' articulo.id %}" class="btn btn-warning fw-semibold flex-fill d-flex align-items-center justify-content-center gap-1">
+                            <i class="bi bi-pencil"></i>Editar
+                        </a>
+                        <button type="button" class="btn btn-danger fw-semibold flex-fill d-flex align-items-center justify-content-center gap-1"
+                            data-bs-toggle="modal" data-bs-target="#confirmacionModal">
+                            <i class="bi bi-trash"></i>Eliminar
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
+
 </section>
 
-<!-- 🛑 Modal de confirmación -->
 <div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger" id="confirmacionModalLabel">¿Estás seguro?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:36px;height:36px">
+                        <i class="bi bi-exclamation-triangle text-danger"></i>
+                    </div>
+                    <h5 class="modal-title fw-semibold mb-0">Confirmar eliminación</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
-                ⚠️ Esta acción no se puede deshacer. ¿Realmente deseas eliminar "{{ articulo.nombre }}"?
+            <div class="modal-body pt-2">
+                <p class="text-muted small mb-0">Esta acción no se puede deshacer. ¿Querés eliminar <strong>{{ articulo.nombre }}</strong>?</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <form method="POST" action="{% url 'eliminar_articulo' articulo.id %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+                    <button type="submit" class="btn btn-sm btn-danger fw-semibold">
+                        <i class="bi bi-trash me-1"></i>Confirmar
+                    </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    .card-title {
-        font-size: 1.4rem; /* Aumenta el tamaño */
-        font-weight: bold; /* Hace el título más grueso */
-        text-transform: uppercase; /* Convierte a mayúsculas */
-        color: #343a40; /* Color oscuro */
-        text-align: center; /* Centra el texto */
-    }
-</style>
 
 {% endblock %}
