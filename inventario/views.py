@@ -107,6 +107,7 @@ def redirigiendo(request):
 def listar_articulos(request):
     asignacion_filtrada = request.GET.get("asignacion", None)
     categoria_filtrada = request.GET.get("categoria", None)
+    q = request.GET.get("q", None)
     articulos = Articulo.objects.all().order_by("id")
 
     if asignacion_filtrada:
@@ -114,6 +115,9 @@ def listar_articulos(request):
 
     if categoria_filtrada:
         articulos = articulos.filter(categoria=categoria_filtrada)
+
+    if q:
+        articulos = articulos.filter(nombre__icontains=q)
 
     asignaciones_disponibles = Articulo.objects.order_by("asignacion").values_list("asignacion", flat=True).distinct()
     categorias_disponibles = Articulo.objects.order_by("categoria").values_list("categoria", flat=True).distinct()
@@ -124,8 +128,8 @@ def listar_articulos(request):
         "categorias_disponibles": categorias_disponibles,
         "asignacion_filtrada": asignacion_filtrada,
         "categoria_filtrada": categoria_filtrada,
+        "q": q,
     })
-
 @login_required(login_url='/')
 def articulos_card(request):
     asignacion_filtrada = request.GET.get("asignacion", None)
