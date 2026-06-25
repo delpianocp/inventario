@@ -1,12 +1,11 @@
 {% extends "inventario/base.html" %}
-
 {% block title %}Iniciar Sesión{% endblock %}
 
 {% block content %}
 <section id="login" class="container mt-3 contenido">
     <div class="row justify-content-center mt-4">
         <div class="col-md-5">
-            <div class="card p-4 shadow-sm">
+            <div class="card p-4 shadow-sm" style="border-radius:12px">
 
                 <div class="text-center mb-4">
                     <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:56px;height:56px">
@@ -17,7 +16,7 @@
                 </div>
 
                 {% if form.errors %}
-                <div class="alert alert-danger d-flex align-items-center py-2" role="alert">
+                <div class="alert alert-danger d-flex align-items-center py-2 mb-3" role="alert">
                     <i class="bi bi-exclamation-circle me-2"></i>
                     <span>Usuario o contraseña incorrectos.</span>
                 </div>
@@ -29,24 +28,24 @@
                     <div class="mb-3">
                         <label for="id_email" class="form-label small fw-semibold text-secondary">Correo electrónico</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-transparent"><i class="bi bi-envelope"></i></span>
-                            <input type="email" name="email" id="id_email" class="form-control" placeholder="tu@email.com" required>
+                            <span class="input-group-text bg-transparent" style="height:42px"><i class="bi bi-envelope"></i></span>
+                            <input type="email" name="email" id="id_email" class="form-control" placeholder="tu@email.com" style="height:42px" required>
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <label for="id_password" class="form-label small fw-semibold text-secondary">Contraseña</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-transparent"><i class="bi bi-lock"></i></span>
-                            <input type="password" name="password" id="id_password" class="form-control" placeholder="••••••••" required>
-                            <button class="btn btn-outline-secondary" type="button" id="toggle-pass">
+                            <span class="input-group-text bg-transparent" style="height:42px"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="password" id="id_password" class="form-control" placeholder="••••••••" style="height:42px" required>
+                            <button class="btn btn-outline-secondary" type="button" id="toggle-pass" style="height:42px">
                                 <i class="bi bi-eye" id="eye-icon"></i>
                             </button>
                         </div>
                     </div>
 
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Entrar</button>
+                        <button type="submit" class="btn btn-primary fw-semibold" style="height:42px">Entrar</button>
                     </div>
                 </form>
 
@@ -70,6 +69,12 @@
         document.getElementById("id_email").value = "";
         document.getElementById("id_password").value = "";
 
+        document.querySelectorAll('input').forEach(input => {
+            const placeholder = input.getAttribute('placeholder');
+            input.addEventListener('focus', () => input.setAttribute('placeholder', ''));
+            input.addEventListener('blur', () => input.setAttribute('placeholder', placeholder || ''));
+        });
+
         document.getElementById("toggle-pass").addEventListener("click", function () {
             const input = document.getElementById("id_password");
             const icon = document.getElementById("eye-icon");
@@ -83,4 +88,5 @@
         });
     });
 </script>
+
 {% endblock %}
