@@ -213,6 +213,9 @@ def eliminar_articulo(request, articulo_id):
 
 @login_required(login_url='/')
 def generar_xls(request):
+    from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+    from openpyxl.utils import get_column_letter
+
     asignacion_filtrada = request.GET.get("asignacion", None)
     articulos = Articulo.objects.all()
 
@@ -220,26 +223,69 @@ def generar_xls(request):
         articulos = articulos.filter(asignacion=asignacion_filtrada)
 
     if not articulos.exists():
-        response = HttpResponse("No hay artículos disponibles para esta asignación.", content_type="text/plain")
-        return response
+        return HttpResponse("No hay artículos disponibles.", content_type="text/plain")
 
-    # Crear archivo Excel
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "Lista de Artículos"
 
-    # Ajustar ancho de la columna B
-    ws.column_dimensions["B"].width = 30  # Ajustar la columna de nombres
+    # Estilos
+    header_font = Font(bold=True, color="FFFFFF", size=12)
+    header_fill = PatternFill("solid", fgColor="2563EB")
+    header_align = Alignment(horizontal="center", vertical="center")
+
+    alt_fill = PatternFill("solid", fgColor="EFF6FF")
+    center_align = Alignment(horizontal="center", vertical="center")
+
+    border_side = Side(style="thin", color="BFDBFE")
+    cell_border = Border(
+        left=border_side, right=border_side,
+        top=border_side, bottom=border_side
+    )
 
     # Encabezados
     headers = ["ID", "Nombre", "Cantidad", "Asignación", "Valor"]
     ws.append(headers)
 
-    # Agregar datos
-    for articulo in articulos:
-        ws.append([articulo.id, articulo.nombre, articulo.cantidad, articulo.asignacion, articulo.valor])
+    for col_num, header in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col_num)
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = header_align
+        cell.border = cell_border
 
-    # Configurar respuesta HTTP
+    ws.row_dimensions[1].height = 28
+
+    # Datos
+    for row_num, articulo in enumerate(articulos, 2):
+        ws.append([
+            articulo.id,
+            articulo.nombre,
+            articulo.cantidad,
+            articulo.asignacion,
+            float(articulo.valor)
+        ])
+
+        fill = alt_fill if row_num % 2 == 0 else PatternFill("solid", fgColor="FFFFFF")
+
+        for col_num in range(1, 6):
+            cell = ws.cell(row=row_num, column=col_num)
+            cell.fill = fill
+            cell.border = cell_border
+            cell.alignment = center_align
+            if col_num == 5:
+                cell.number_format = '"$"#,##0.00'
+
+        ws.row_dimensions[row_num].height = 22
+
+    # Ancho de columnas
+    col_widths = [8, 30, 12, 18, 14]
+    for i, width in enumerate(col_widths, 1):
+        ws.column_dimensions[get_column_letter(i)].width = width
+
+    # Congelar fila de encabezado
+    ws.freeze_panes = "A2"
+
     response = HttpResponse(content_type="application/vnd.ms-excel")
     response["Content-Disposition"] = 'attachment; filename="lista_articulos.xlsx"'
     wb.save(response)
@@ -264,11 +310,58 @@ def solicitar_recuperacion(request):
             codigo = str(random.randint(100000, 999999))
             CodigoRecuperacion.objects.create(usuario=usuario, codigo=codigo)
 
+            html_message = f"""
+<!DOCTYPE html>
+<html>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:Arial,sans-serif">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0">
+    <tr>
+      <td align="center">
+        <table width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0">
+          
+          <tr>
+            <td style="background:#2563EB;padding:28px 32px;text-align:center">
+              <h1 style="color:#ffffff;font-size:22px;margin:0;font-weight:700">Recuperación de contraseña</h1>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:32px">
+              <p style="color:#374151;font-size:15px;margin:0 0 16px">Hola <strong>{usuario.username}</strong>, recibimos una solicitud para restablecer tu contraseña.</p>
+              <p style="color:#374151;font-size:15px;margin:0 0 24px">Tu código de verificación es:</p>
+
+              <div style="background:#EFF6FF;border:2px dashed #2563EB;border-radius:10px;padding:24px;text-align:center;margin-bottom:24px">
+                <span style="font-size:36px;font-weight:700;letter-spacing:10px;color:#1D4ED8">{codigo}</span>
+              </div>
+
+              <div style="background:#FEF3C7;border-left:4px solid #F59E0B;border-radius:4px;padding:12px 16px;margin-bottom:24px">
+                <p style="color:#92400E;font-size:13px;margin:0">Este código vence en <strong>10 minutos</strong>. No lo compartas con nadie.</p>
+              </div>
+
+              <p style="color:#6B7280;font-size:13px;margin:0">Si no solicitaste este código, podés ignorar este email. Tu cuenta está segura.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="background:#F8FAFC;padding:16px 32px;text-align:center;border-top:1px solid #E2E8F0">
+              <p style="color:#9CA3AF;font-size:12px;margin:0">© 2025 Inventario · Todos los derechos reservados</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+"""
+
             send_mail(
-                "Código de recuperación de contraseña",
-                f"Tu código es: {codigo}\n\nVence en 10 minutos.",
-                settings.DEFAULT_FROM_EMAIL,
-                [email]
+                subject="Código de recuperación de contraseña",
+                message=f"Hola {usuario.username}, tu código es: {codigo}\n\nVence en 10 minutos.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                html_message=html_message,
             )
 
             request.session["recuperacion_user_id"] = usuario.id
