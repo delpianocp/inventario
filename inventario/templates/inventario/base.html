@@ -22,21 +22,49 @@
                 <span style="letter-spacing:-0.3px">Inventario.C</span>
             </a>
 
+            <div class="d-flex align-items-center gap-2 ms-auto me-2">
+
+                {% if show_inicio %}
+                <a href="{% url 'index' %}" class="btn btn-sm btn-outline-light d-flex align-items-center gap-1">
+                    <i class="bi bi-house"></i>
+                    <span class="d-none d-lg-inline">Inicio</span>
+                </a>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                <div class="d-flex align-items-center gap-2 px-2 py-1 rounded-pill" style="background:rgba(255,255,255,0.08)">
+                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width:26px;height:26px;min-width:26px;font-size:11px;font-weight:600">
+                        {{ user.username|first|upper }}
+                    </div>
+                    <span class="text-white small d-none d-sm-inline">{{ user.username }}</span>
+                </div>
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-sm d-flex align-items-center gap-1" type="submit" style="background:rgba(239,68,68,0.15);color:#FCA5A5;border:0.5px solid rgba(239,68,68,0.3)">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span class="d-none d-lg-inline">Salir</span>
+                    </button>
+                </form>
+                {% endif %}
+
+            </div>
+
+            {% if user.is_authenticated %}
             <button class="navbar-toggler border-0 p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            {% endif %}
 
             <div class="collapse navbar-collapse" id="navbarNav">
-
                 {% if user.is_authenticated %}
-                <ul class="navbar-nav mx-auto gap-1">
+                <ul class="navbar-nav mt-2 mt-lg-0 mx-lg-auto gap-1">
                     <li class="nav-item">
-                        <a href="{% url 'articulos' %}" class="nav-link d-flex align-items-center gap-1 px-3 rounded-2 {% if request.resolver_match.url_name == 'articulos' %}active bg-white bg-opacity-10{% endif %}">
+                        <a href="{% url 'articulos' %}" class="nav-link d-flex align-items-center gap-1 px-3 rounded-2 {% if request.resolver_match.url_name == 'articulos' %}bg-white bg-opacity-10{% endif %}">
                             <i class="bi bi-grid-3x3-gap"></i>Artículos
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'cargar_articulo' %}" class="nav-link d-flex align-items-center gap-1 px-3 rounded-2 {% if request.resolver_match.url_name == 'cargar_articulo' %}active bg-white bg-opacity-10{% endif %}">
+                        <a href="{% url 'cargar_articulo' %}" class="nav-link d-flex align-items-center gap-1 px-3 rounded-2 {% if request.resolver_match.url_name == 'cargar_articulo' %}bg-white bg-opacity-10{% endif %}">
                             <i class="bi bi-plus-circle"></i>Nuevo artículo
                         </a>
                     </li>
@@ -47,38 +75,6 @@
                     </li>
                 </ul>
                 {% endif %}
-
-                <ul class="navbar-nav align-items-center gap-2 ms-auto">
-
-                    {% if show_inicio %}
-                    <li class="nav-item">
-                        <a href="{% url 'index' %}" class="btn btn-sm btn-outline-light d-flex align-items-center gap-1">
-                            <i class="bi bi-house"></i>Inicio
-                        </a>
-                    </li>
-                    {% endif %}
-
-                    {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <div class="d-flex align-items-center gap-2 px-3 py-1 rounded-pill" style="background:rgba(255,255,255,0.08)">
-                            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width:26px;height:26px;min-width:26px;font-size:11px;font-weight:600">
-                                {{ user.username|first|upper }}
-                            </div>
-                            <span class="text-white small d-none d-lg-inline">{{ user.username }}</span>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <form method="POST" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button class="btn btn-sm d-flex align-items-center gap-1" type="submit" style="background:rgba(239,68,68,0.15);color:#FCA5A5;border:0.5px solid rgba(239,68,68,0.3)">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span class="d-none d-lg-inline">Salir</span>
-                            </button>
-                        </form>
-                    </li>
-                    {% endif %}
-
-                </ul>
             </div>
 
         </div>
