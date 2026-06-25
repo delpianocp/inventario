@@ -12,22 +12,43 @@
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style="background:#0F172A">
         <div class="container">
 
             <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold" href="">
-                <div class="bg-primary rounded d-flex align-items-center justify-content-center" style="width:28px;height:28px">
+                <div class="bg-primary rounded-2 d-flex align-items-center justify-content-center" style="width:30px;height:30px;min-width:30px">
                     <i class="bi bi-box-seam" style="font-size:14px"></i>
                 </div>
-                Inventario.C
+                <span style="letter-spacing:-0.3px">Inventario.C</span>
             </a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler border-0 p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav align-items-center gap-2">
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav mx-auto gap-1">
+                    <li class="nav-item">
+                        <a href="{% url 'articulos' %}" class="nav-link d-flex align-items-center gap-1 px-3 rounded-2 {% if request.resolver_match.url_name == 'articulos' %}active bg-white bg-opacity-10{% endif %}">
+                            <i class="bi bi-grid-3x3-gap"></i>Artículos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'cargar_articulo' %}" class="nav-link d-flex align-items-center gap-1 px-3 rounded-2 {% if request.resolver_match.url_name == 'cargar_articulo' %}active bg-white bg-opacity-10{% endif %}">
+                            <i class="bi bi-plus-circle"></i>Nuevo artículo
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'generar_xls' %}" class="nav-link d-flex align-items-center gap-1 px-3 rounded-2">
+                            <i class="bi bi-file-earmark-excel text-success"></i>Exportar XLS
+                        </a>
+                    </li>
+                </ul>
+                {% endif %}
+
+                <ul class="navbar-nav align-items-center gap-2 ms-auto">
 
                     {% if show_inicio %}
                     <li class="nav-item">
@@ -39,20 +60,19 @@
 
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a href="{% url 'articulos' %}" class="btn btn-sm btn-outline-light d-flex align-items-center gap-1">
-                            <i class="bi bi-grid"></i>Ver lista
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <span class="text-white-50 small d-none d-lg-inline">
-                            <i class="bi bi-person-circle me-1"></i>{{ user.username }}
-                        </span>
+                        <div class="d-flex align-items-center gap-2 px-3 py-1 rounded-pill" style="background:rgba(255,255,255,0.08)">
+                            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width:26px;height:26px;min-width:26px;font-size:11px;font-weight:600">
+                                {{ user.username|first|upper }}
+                            </div>
+                            <span class="text-white small d-none d-lg-inline">{{ user.username }}</span>
+                        </div>
                     </li>
                     <li class="nav-item">
                         <form method="POST" action="{% url 'logout' %}">
                             {% csrf_token %}
-                            <button class="btn btn-sm btn-danger d-flex align-items-center gap-1" type="submit">
-                                <i class="bi bi-box-arrow-right"></i>Cerrar sesión
+                            <button class="btn btn-sm d-flex align-items-center gap-1" type="submit" style="background:rgba(239,68,68,0.15);color:#FCA5A5;border:0.5px solid rgba(239,68,68,0.3)">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span class="d-none d-lg-inline">Salir</span>
                             </button>
                         </form>
                     </li>
