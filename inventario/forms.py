@@ -51,6 +51,20 @@ class LoginForm(forms.Form):  # No extendemos AuthenticationForm
     )
 
 
+class EmailRecuperacionForm(forms.Form):
+    email = forms.EmailField(label="Correo electrónico", widget=forms.EmailInput(attrs={"class": "form-control"}))
 
+class CodigoForm(forms.Form):
+    codigo = forms.CharField(label="Código", max_length=6, widget=forms.TextInput(attrs={"class": "form-control"}))
+
+class NuevaPasswordForm(forms.Form):
+    password = forms.CharField(label="Nueva contraseña", widget=forms.PasswordInput(attrs={"class": "form-control"}))
+    password2 = forms.CharField(label="Confirmar contraseña", widget=forms.PasswordInput(attrs={"class": "form-control"}))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("password") != cleaned_data.get("password2"):
+            raise forms.ValidationError("Las contraseñas no coinciden.")
+        return cleaned_data
 
     

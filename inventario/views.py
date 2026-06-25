@@ -19,7 +19,10 @@ from django.conf import settings
 from django.contrib.auth.views import LoginView
 
 import openpyxl
-
+from .forms import EmailRecuperacionForm, CodigoForm, NuevaPasswordForm
+from .models import CodigoRecuperacion
+import random
+from django.utils import timezone
 
 
 
@@ -243,3 +246,83 @@ def confirmacion_articulo(request):
     return render(request, "inventario/confirmacion_articulo.html")
 
 
+def solicitar_recuperacion(request):
+    if request.method == "POST":
+        form = EmailRecuperacionForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            try:
+                usuario = User.objects.get(email=email)
+            except User.DoesNotExist:
+                form.add_error("email", "No existe una cuenta con ese email.")
+                return render(request, "inventario/solicitar_recuperacion.html", {"form": form})
+
+            codigo = str(random.randint(100000, 999999))
+            CodigoRecuperacion.objects.create(usuario=usuario, codigo=codigo)
+
+            send_mail(
+                "Código de recuperación de contraseña",
+                f"Tu código es: {codigo}\n\nVence en 10 minutos.",
+                settings.DEFAULT_FROM_EMAIL,
+                [email]
+            )
+
+            request.session["recuperacion_user_id"] = usuario.id
+            return redirect("verificar_codigo")
+    else:
+        form = EmailRecuperacionForm()
+
+    return render(request, "inventario/solicitar_recuperacion.html", {"form": form})
+
+
+def verificar_codigo(request):
+    user_id = request.session.get("recuperacion_user_id")
+    if not user_id:
+        return redirect("solicitar_recuperacion")
+
+    if request.method == "POST":
+        form = CodigoForm(request.POST)
+        if form.is_valid():
+            codigo_ingresado = form.cleaned_data["codigo"]
+            try:
+                registro = CodigoRecuperacion.objects.filter(
+                    usuario_id=user_id,
+                    codigo=codigo_ingresado,
+                    usado=False
+                ).latest("creado_en")
+
+                if registro.esta_vigente():
+                    registro.usado = True
+                    registro.save()
+                    request.session["recuperacion_verificado"] = True
+                    return redirect("nueva_password")
+                else:
+                    form.add_error("codigo", "El código expiró. Solicitá uno nuevo.")
+            except CodigoRecuperacion.DoesNotExist:
+                form.add_error("codigo", "Código incorrecto.")
+    else:
+        form = CodigoForm()
+
+    return render(request, "inventario/verificar_codigo.html", {"form": form})
+
+
+def nueva_password(request):
+    user_id = request.session.get("recuperacion_user_id")
+    verificado = request.session.get("recuperacion_verificado")
+
+    if not user_id or not verificado:
+        return redirect("solicitar_recuperacion")
+
+    if request.method == "POST":
+        form = NuevaPasswordForm(request.POST)
+        if form.is_valid():
+            usuario = get_object_or_404(User, id=user_id)
+            usuario.set_password(form.cleaned_data["password"])
+            usuario.save()
+            del request.session["recuperacion_user_id"]
+            del request.session["recuperacion_verificado"]
+            return redirect("index")
+    else:
+        form = NuevaPasswordForm()
+
+    return render(request, "inventario/nueva_password.html", {"form": form})
