@@ -3,22 +3,114 @@
 {% block content %}
 <section class="container mt-3 contenido">
     <div class="row justify-content-center mt-4">
-        <div class="col-md-6">
-            <div class="card p-4">
-                <h3 class="text-center">Ingresá el Código</h3>
-                <p class="text-center">Revisá tu email e ingresá el código de 6 dígitos.</p>
-                <form method="POST">
+        <div class="col-md-5">
+            <div class="card p-4 shadow-sm">
+
+                <div class="text-center mb-4">
+                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:56px;height:56px">
+                        <i class="bi bi-envelope-check fs-4 text-success"></i>
+                    </div>
+                    <h2 class="h5 fw-semibold mb-1">Verificá tu código</h2>
+                    <p class="text-muted small mb-0">Ingresá los 6 dígitos que enviamos a tu email</p>
+                </div>
+
+                {% if form.errors %}
+                <div class="alert alert-danger d-flex align-items-center py-2 mb-3" role="alert">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    <div>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <form method="POST" id="codigo-form" autocomplete="off">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <div class="d-grid mt-3">
-                        <button type="submit" class="btn btn-primary">Verificar</button>
+                    <input type="hidden" name="codigo" id="codigo-hidden">
+
+                    <div class="d-flex gap-2 justify-content-center mb-4">
+                        <input class="code-input form-control text-center fw-bold fs-4 p-0" maxlength="1" inputmode="numeric" pattern="[0-9]" style="width:48px;height:56px">
+                        <input class="code-input form-control text-center fw-bold fs-4 p-0" maxlength="1" inputmode="numeric" pattern="[0-9]" style="width:48px;height:56px">
+                        <input class="code-input form-control text-center fw-bold fs-4 p-0" maxlength="1" inputmode="numeric" pattern="[0-9]" style="width:48px;height:56px">
+                        <input class="code-input form-control text-center fw-bold fs-4 p-0" maxlength="1" inputmode="numeric" pattern="[0-9]" style="width:48px;height:56px">
+                        <input class="code-input form-control text-center fw-bold fs-4 p-0" maxlength="1" inputmode="numeric" pattern="[0-9]" style="width:48px;height:56px">
+                        <input class="code-input form-control text-center fw-bold fs-4 p-0" maxlength="1" inputmode="numeric" pattern="[0-9]" style="width:48px;height:56px">
+                    </div>
+
+                    <div id="error-box" class="alert alert-danger d-flex align-items-center py-2 mb-3" style="display:none!important">
+                        <i class="bi bi-exclamation-circle me-2"></i>
+                        <span>Completá los 6 dígitos antes de continuar.</span>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="button" onclick="submitCodigo()" class="btn btn-success fw-semibold">
+                            <i class="bi bi-check-lg me-2"></i>Verificar
+                        </button>
                     </div>
                 </form>
+
                 <div class="text-center mt-3">
-                    <a href="{% url 'solicitar_recuperacion' %}">Pedir otro código</a>
+                    <a href="{% url 'solicitar_recuperacion' %}" class="text-muted small">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>Pedir otro código
+                    </a>
                 </div>
+
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    const inputs = document.querySelectorAll('.code-input');
+
+    inputs.forEach((input, i) => {
+        input.addEventListener('input', () => {
+            input.value = input.value.replace(/[^0-9]/g, '');
+            if (input.value) {
+                input.classList.add('border-success');
+                if (i < inputs.length - 1) inputs[i + 1].focus();
+            } else {
+                input.classList.remove('border-success');
+            }
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !input.value && i > 0) {
+                inputs[i - 1].focus();
+            }
+        });
+
+        input.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const text = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 6);
+            text.split('').forEach((char, j) => {
+                if (inputs[j]) {
+                    inputs[j].value = char;
+                    inputs[j].classList.add('border-success');
+                }
+            });
+            if (inputs[text.length - 1]) inputs[text.length - 1].focus();
+        });
+    });
+
+    function submitCodigo() {
+        const codigo = Array.from(inputs).map(i => i.value).join('');
+        const errorBox = document.getElementById('error-box');
+
+        if (codigo.length < 6) {
+            errorBox.style.display = 'flex';
+            inputs.forEach(input => {
+                if (!input.value) input.classList.add('border-danger');
+            });
+            return;
+        }
+
+        errorBox.style.display = 'none';
+        document.getElementById('codigo-hidden').value = codigo;
+        document.getElementById('codigo-form').submit();
+    }
+</script>
 {% endblock %}
