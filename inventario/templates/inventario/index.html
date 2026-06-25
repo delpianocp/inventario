@@ -25,21 +25,29 @@
                 <form method="POST" autocomplete="off">
                     {% csrf_token %}
 
-                    <div class="mb-3">
+                    <div style="margin-bottom:16px">
                         <label for="id_email" class="form-label small fw-semibold text-secondary">Correo electrónico</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-transparent" style="height:42px"><i class="bi bi-envelope"></i></span>
-                            <input type="email" name="email" id="id_email" class="form-control" placeholder="tu@email.com" style="height:42px" required>
+                        <div style="display:flex;align-items:center;border:1px solid #D1D5DB;border-radius:8px;padding:0 12px;height:42px;gap:10px;background:#fff">
+                            <i class="bi bi-envelope" style="font-size:17px;color:#9CA3AF;flex-shrink:0"></i>
+                            <input type="email" name="email" id="id_email" placeholder="tu@email.com"
+                                style="border:none;outline:none;background:transparent;font-size:14px;width:100%"
+                                onfocus="this.placeholder=''"
+                                onblur="this.placeholder='tu@email.com'"
+                                required>
                         </div>
                     </div>
 
-                    <div class="mb-4">
+                    <div style="margin-bottom:32px">
                         <label for="id_password" class="form-label small fw-semibold text-secondary">Contraseña</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-transparent" style="height:42px"><i class="bi bi-lock"></i></span>
-                            <input type="password" name="password" id="id_password" class="form-control" placeholder="••••••••" style="height:42px" required>
-                            <button class="btn btn-outline-secondary" type="button" id="toggle-pass" style="height:42px">
-                                <i class="bi bi-eye" id="eye-icon"></i>
+                        <div style="display:flex;align-items:center;border:1px solid #D1D5DB;border-radius:8px;padding:0 12px;height:42px;gap:10px;background:#fff">
+                            <i class="bi bi-lock" style="font-size:17px;color:#9CA3AF;flex-shrink:0"></i>
+                            <input type="password" name="password" id="id_password" placeholder="••••••••"
+                                style="border:none;outline:none;background:transparent;font-size:14px;width:100%"
+                                onfocus="this.placeholder=''"
+                                onblur="this.placeholder='••••••••'"
+                                required>
+                            <button type="button" id="toggle-pass" style="background:none;border:none;cursor:pointer;padding:0;color:#9CA3AF;display:flex;align-items:center">
+                                <i class="bi bi-eye" id="eye-icon" style="font-size:17px"></i>
                             </button>
                         </div>
                     </div>
@@ -68,12 +76,6 @@
     document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("id_email").value = "";
         document.getElementById("id_password").value = "";
-
-        document.querySelectorAll('input').forEach(input => {
-            const placeholder = input.getAttribute('placeholder');
-            input.addEventListener('focus', () => input.setAttribute('placeholder', ''));
-            input.addEventListener('blur', () => input.setAttribute('placeholder', placeholder || ''));
-        });
 
         document.getElementById("toggle-pass").addEventListener("click", function () {
             const input = document.getElementById("id_password");
