@@ -4,63 +4,83 @@
 
 {% block content %}
 <section id="login" class="container mt-3 contenido">
-    <h2 class="text-center">Iniciar Sesión</h2>
-    <p class="text-center">Accede al sistema para gestionar tu inventario.</p>
-
     <div class="row justify-content-center mt-4">
-        <div class="col-md-6">
-            <div class="card p-4">
-                <h3 class="text-center">Formulario de Login</h3>
+        <div class="col-md-5">
+            <div class="card p-4 shadow-sm">
 
-                <!-- Mensajes de error -->
-                {% if form.errors %}
-                    <div class="alert alert-danger">
-                        <ul>
-                            {% for error in form.non_field_errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
+                <div class="text-center mb-4">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:56px;height:56px">
+                        <i class="bi bi-box-seam fs-4 text-primary"></i>
                     </div>
+                    <h2 class="h5 fw-semibold mb-1">Iniciar sesión</h2>
+                    <p class="text-muted small mb-0">Accedé a tu inventario</p>
+                </div>
+
+                {% if form.errors %}
+                <div class="alert alert-danger d-flex align-items-center py-2" role="alert">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    <span>Usuario o contraseña incorrectos.</span>
+                </div>
                 {% endif %}
 
-                <form method="POST">
+                <form method="POST" autocomplete="off">
                     {% csrf_token %}
-                    
-                    <!-- Campo de email -->
+
                     <div class="mb-3">
-                        <label for="id_email">Correo Electrónico:</label>
-                        <input type="email" name="email" id="id_email" class="form-control" required>
+                        <label for="id_email" class="form-label small fw-semibold text-secondary">Correo electrónico</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent"><i class="bi bi-envelope"></i></span>
+                            <input type="email" name="email" id="id_email" class="form-control" placeholder="tu@email.com" required>
+                        </div>
                     </div>
 
-                    <!-- Campo de contraseña -->
-                    <div class="mb-3">
-                        <label for="id_password">Contraseña:</label>
-                        <input type="password" name="password" id="id_password" class="form-control" required>
+                    <div class="mb-4">
+                        <label for="id_password" class="form-label small fw-semibold text-secondary">Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="password" id="id_password" class="form-control" placeholder="••••••••" required>
+                            <button class="btn btn-outline-secondary" type="button" id="toggle-pass">
+                                <i class="bi bi-eye" id="eye-icon"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Botón de inicio de sesión -->
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary">Entrar</button>
                     </div>
                 </form>
-                <div class="text-center mt-2">
-                    <a href="{% url 'solicitar_recuperacion' %}">¿Olvidaste tu contraseña?</a>
-                </div>
+
                 <div class="text-center mt-3">
-                    <p>¿No tienes cuenta? <a href="{% url 'registro' %}">Regístrate aquí</a></p>
+                    <a href="{% url 'solicitar_recuperacion' %}" class="text-muted small">¿Olvidaste tu contraseña?</a>
                 </div>
+
+                <hr class="my-3">
+
+                <p class="text-center small text-muted mb-0">
+                    ¿No tenés cuenta? <a href="{% url 'registro' %}" class="text-primary fw-semibold">Registrate aquí</a>
+                </p>
 
             </div>
         </div>
     </div>
 </section>
 
-<!-- 🔧 Script para limpiar campos al cargar la página -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("id_email").value = "";
         document.getElementById("id_password").value = "";
+
+        document.getElementById("toggle-pass").addEventListener("click", function () {
+            const input = document.getElementById("id_password");
+            const icon = document.getElementById("eye-icon");
+            if (input.type === "password") {
+                input.type = "text";
+                icon.className = "bi bi-eye-slash";
+            } else {
+                input.type = "password";
+                icon.className = "bi bi-eye";
+            }
+        });
     });
 </script>
-
 {% endblock %}
